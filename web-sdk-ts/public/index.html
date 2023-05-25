@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="../src/index.ts"></script>
+</head>
+<body id="root">
+  <h1>A minimal example of video conference via livedigital SDK</h1>
+  <div id="slots">
+    <div class="slot" id="me"><h4>Your Camera</h4><video autoplay id="me-video" /></div>
+    <div class="slot" id="remote"><h4>Remote Camera</h4><video autoplay id="remote-video" /></div>
+  </div>
+  <div id="controls">
+    <button id="join-room">Join Room</button>
+    <button id="mic-toggle">Microphone</button>
+    <button id="camera-toggle">Camera</button>
+  </div>
+</body>
+</html>
