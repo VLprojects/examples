@@ -1,0 +1,20 @@
+{
+  "name": "livedigital-sdk-example",
+  "version": "1.0.0",
+  "description": "A video conference example",
+  "main": "index.js",
+  "repository": "git@github.com:cgibin/livedigital-sdk-example.git",
+  "author": "Timur Pushin <pushin.t@vlprojects.pro>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel public/index.html --https --host dev.livedigital.space --port 3000 --open"
+  },
+  "devDependencies": {
+    "parcel": "^2.0.0",
+    "process": "^0.11.10",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@livedigital/client": "^2.41.1"
+  }
+}
