@@ -39,7 +39,7 @@ class App {
       },
       logLevel: 7,
       onLogMessage: (msg: string, meta: Record<string, unknown> = {}) => {
-        console.log(msg, meta);
+        console.log(msg, meta); // you can get some debug info here
       },
     });
     this.listenChannelEvents();
@@ -91,10 +91,7 @@ class App {
         sdkSecret,
         uid: Date.now().toString(),
         appData: {
-          isAudioStreamingAllowed: true,
-          isVideoStreamingAllowed: true,
-          isModerator: true,
-          isOutOfScreen: false,
+          someKey: 'someValue', // The data specified in appData will be available to all conference participants. For example, this can be used for the username, his states, etc.
         },
         role: 'host',
       });
