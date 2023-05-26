@@ -1,4 +1,5 @@
 # livedigital-sdk-example
+This is the simplest example of using livedigital-sdk to build webrtc applications
 
 ## Installation
 
@@ -9,6 +10,15 @@ yarn install
 npm install
 ```
 
+In accordance with the security policy, access to media servers is temporarily allowed only from the
+dev.livedigital.space domain on port 3000, add this entry to your hosts file
+
+```bash
+# dev (on https://dev.livedigital.space:3000)
+sudo sh -c "echo '127.0.0.1 dev.livedigital.space' >> /etc/hosts"
+```
+
+## Launch
 Run the application in **dev** environment
 
 First you need create [application](https://management-api.livedigital.space/doc/#/applications/post_clients_applications)
@@ -19,14 +29,6 @@ More information about [management API](https://management-api.livedigital.space
 [api docs](https://vlprojects.github.io/docs/LivedigitalManagementAPI/ManagementAPI/)
 
 You can also check our [web sdk documentation](https://vlprojects.github.io/docs/LivedigitalWebSDK/GettingStarted/)
-
-In accordance with the security policy, access to media servers is temporarily allowed only from the
-dev.livedigital.space domain on port 3000, add this entry to your hosts file
-
-```bash
-# dev (on https://dev.livedigital.space:3000)
-sudo sh -c "echo '127.0.0.1 dev.livedigital.space' >> /etc/hosts"
-```
 
 Now you can run the example
 
