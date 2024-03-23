@@ -1,14 +1,14 @@
 import Client from '@livedigital/client';
 import type PeerTrack from '@livedigital/client/dist/engine/media/tracks/PeerTrack';
 import type ClientPeer from '@livedigital/client/dist/engine/Peer';
-import type { Track } from '@livedigital/client/dist/types/common';
+import {Track} from '@livedigital/client/dist/types/media';
 
 import Peer from './Peer';
-import { joinParams } from '../config';
 
-import {
-  PeerCallbacks,
-} from '../types';
+import {PeerCallbacks} from '../types';
+import {AvailableMediaDevices} from '@livedigital/client/src/types/common';
+import {joinParams} from '../config';
+
 
 class App {
   private rootEl: HTMLElement | null = null;
@@ -25,9 +25,22 @@ class App {
 
   private isJoining = false;
 
+  private isDisconnecting = false;
+
+  private devices: AvailableMediaDevices = {
+    video: [],
+    audio: [],
+  };
+
+  private videoEnabled = false;
+
+  private audioEnabled = false;
+
   private callbacks: PeerCallbacks = {
-    onTrackStart: (track: PeerTrack) => { this.onPeerTrackStart(track); },
-    onTrackEnd: (track: PeerTrack) => { this.onPeerTrackEnd(track); },
+    onTrackStart: (track: PeerTrack, peer: Peer) => { this.onPeerTrackStart(track, peer); },
+    onTrackEnd: (track: PeerTrack, peer: Peer) => { this.onPeerTrackEnd(track, peer); },
+    onTrackPaused: (track: PeerTrack, peer: Peer) => { this.onPeerTrackEnd(track, peer); },
+    onTrackResumed: (track: PeerTrack, peer: Peer) => { this.onPeerTrackStart(track, peer); },
   };
 
   constructor() {
@@ -69,7 +82,7 @@ class App {
       if (peerId) {
         this.peers.delete(peerId);
         const videoEl = this.rootEl?.querySelector('#remote-video') as HTMLVideoElement;
-        (videoEl.srcObject as MediaStream).getTracks().forEach((t) => t.stop());
+        (videoEl.srcObject as MediaStream)?.getTracks().forEach((t) => t.stop());
         videoEl.srcObject = null;
       }
     });
@@ -81,23 +94,55 @@ class App {
     }
 
     const {
-      appId, channelId, sdkSecret
+      channelId,
+      token,
+      role,
     } = joinParams;
 
     try {
       await this.client.join({
-        appId,
+        token,
         channelId,
-        sdkSecret,
-        uid: Date.now().toString(),
         appData: {
           someKey: 'someValue', // The data specified in appData will be available to all conference participants. For example, this can be used for the username, his states, etc.
         },
-        role: 'host',
+        role,
       });
     } catch (error: unknown) {
       console.log('JOIN ERROR', error);
     }
+  }
+
+  private async leaveRoom() {
+    const myVideoEl = this.rootEl?.querySelector<HTMLVideoElement>('#me-video');
+    if (!myVideoEl) {
+      myVideoEl.srcObject = null;
+    }
+
+    const remoteVideoEl = this.rootEl?.querySelector<HTMLVideoElement>('#remote-video');
+    if (!remoteVideoEl) {
+      remoteVideoEl.srcObject = null;
+    }
+
+
+    this.isDisconnecting = true;
+    this.updateUI();
+    try {
+      await Promise.all([
+        this.disableAudio(),
+        this.disableVideo(),
+      ])
+
+      this.micTrack = null;
+      this.cameraTrack = null;
+      await this.client?.leave();
+      this.peers.clear();
+    } catch (error) {
+      console.error('Failed to leave room', error);
+    }
+
+    this.isDisconnecting = false;
+    this.updateUI();
   }
 
   private async joinRoom() {
@@ -106,8 +151,6 @@ class App {
     try {
       await this.join();
       await this.loadPeers();
-      await this.enableAudio();
-      await this.enableVideo();
     } catch (error) {
       console.error('Failed to join', error);
     }
@@ -136,25 +179,8 @@ class App {
 
   private async initMediaDevices() {
     try {
-      const videoEl = this.rootEl?.querySelector<HTMLVideoElement>('#me-video');
-      if (!videoEl || !this.client) {
-        throw new Error('App not initialized');
-      }
-
-      const devices = await this.client.detectDevices();
-      console.log('Available devices', devices);
-      if (devices.video.length) {
-        this.cameraTrack = await this.client.createCameraVideoTrack({ video: { deviceId: 'default' } });
-      }
-
-      if (devices.audio.length) {
-        this.micTrack = await this.client.createMicrophoneAudioTrack({ audio: { deviceId: 'default' } });
-      }
-
-      if (this.cameraTrack) {
-        const stream = new MediaStream([this.cameraTrack.mediaStreamTrack]);
-        videoEl.srcObject = stream;
-      }
+      this.devices = await this.client.detectDevices();
+      console.log('Available devices', this.devices);
     } catch (error) {
       console.error('Error getting meida devices', error);
     }
@@ -163,7 +189,12 @@ class App {
   private async enableAudio() {
     this.ui.micToggle.disabled = true;
     try {
+      if (this.devices.audio.length && !this.micTrack) {
+        this.micTrack = await this.client?.createMicrophoneAudioTrack({ audio: { deviceId: 'default' } });
+      }
+
       await (this.micTrack?.isPublished ? this.micTrack.resume() : await this.micTrack?.publish());
+      this.audioEnabled = true;
     } catch (error) {
       console.error('Mic error', error);
     }
@@ -174,6 +205,7 @@ class App {
     this.ui.micToggle.disabled = true;
     try {
       await (this.micTrack?.isPublished ? this.micTrack.pause() : await this.micTrack?.unpublish());
+      this.audioEnabled = false;
     } catch (error) {
       console.error('Mic error', error);
     }
@@ -182,8 +214,19 @@ class App {
 
   private async enableVideo() {
     this.ui.cameraToggle.disabled = true;
+    const videoEl = this.rootEl?.querySelector<HTMLVideoElement>('#me-video');
+    if (!videoEl || !this.client) {
+      throw new Error('App not initialized');
+    }
+
     try {
+      if (this.devices.video.length && !this.cameraTrack) {
+        this.cameraTrack = await this.client?.createCameraVideoTrack({ video: { deviceId: 'default' } });
+        videoEl.srcObject = new MediaStream([this.cameraTrack.mediaStreamTrack]);
+      }
+
       await (this.cameraTrack?.isPublished ? this.cameraTrack.resume() : await this.cameraTrack?.publish());
+      this.videoEnabled = true;
     } catch (error) {
       console.error('Camera error', error);
     }
@@ -194,14 +237,26 @@ class App {
     this.ui.cameraToggle.disabled = true;
     try {
       await (this.cameraTrack?.isPublished ? this.cameraTrack.pause() : await this.cameraTrack?.unpublish());
+      this.videoEnabled = false;
+
+      const videoEl = this.rootEl?.querySelector('#my-video') as HTMLVideoElement;
+      if (!videoEl) {
+        return;
+      }
+
+      videoEl.srcObject = null;
     } catch (error) {
       console.error('Camera error', error);
     }
     this.ui.cameraToggle.disabled = false;
   }
 
-  private async onPeerTrackStart(track: PeerTrack) {
+  private async onPeerTrackStart(track: PeerTrack, peer: Peer) {
     // for simplicity we have only one video slot for remote participants
+    if (peer.peer.isMe) {
+      return;
+    }
+
     const videoEl = this.rootEl?.querySelector('#remote-video') as HTMLVideoElement;
     if (videoEl) {
       const stream = (videoEl.srcObject || new MediaStream()) as MediaStream;
@@ -211,36 +266,45 @@ class App {
     }
   }
 
-  private onPeerTrackEnd(track: PeerTrack) {
+  private onPeerTrackEnd(track: PeerTrack, peer: Peer) {
     console.log('Track end', track);
-  }
-
-  private async toggleMic() {
-    if (!this.micTrack) {
+    if (peer.peer.isMe) {
       return;
     }
 
-    await (this.micTrack.isPaused ? this.enableAudio() : this.disableAudio());
+    if (track.kind !== 'video') {
+      return;
+    }
+
+
+    const videoEl = this.rootEl?.querySelector('#remote-video') as HTMLVideoElement;
+    if (!videoEl) {
+      return;
+    }
+
+    videoEl.srcObject = null;
+  }
+
+  private async toggleMic() {
+    await (this.audioEnabled ? this.disableAudio() : this.enableAudio());
     this.updateUI();
   }
 
   private async toggleCamera() {
-    if (!this.cameraTrack) {
-      return;
-    }
-
-    await (this.cameraTrack.isPaused ? this.enableVideo() : this.disableVideo());
+    await (this.videoEnabled ? this.disableVideo() : this.enableVideo());
     this.updateUI();
   }
 
   private updateUI() {
     const isJoined = Boolean(this.client?.peers.length);
     this.ui.joinButton.disabled = isJoined || this.isJoining;
+    this.ui.leaveButton.disabled = !isJoined || this.isJoining || this.isDisconnecting;
     this.ui.joinButton.innerText = this.isJoining ? 'Joining...' : 'Join';
+    this.ui.leaveButton.innerText = this.isDisconnecting ? 'Disconnecting...' : 'Disconnect';
     this.ui.micToggle.disabled = Boolean(!isJoined);
     this.ui.cameraToggle.disabled = Boolean(!isJoined);
-    this.ui.micToggle.innerText = this.micTrack?.isPaused ? 'Microphone On' : 'Microphone Off';
-    this.ui.cameraToggle.innerText = this.cameraTrack?.isPaused ? 'Camera On' : 'Camera Off';
+    this.ui.micToggle.innerText = !this.micTrack || this.micTrack?.isPaused ? 'Enable mic' : 'Disable mic';
+    this.ui.cameraToggle.innerText = !this.cameraTrack || this.cameraTrack?.isPaused ? 'Enable cam' : 'Disable cam';
   }
 
   private initUI() {
@@ -250,11 +314,13 @@ class App {
 
     this.ui = {
       joinButton: this.rootEl.querySelector('#join-room') as HTMLButtonElement,
+      leaveButton: this.rootEl.querySelector('#leave-room') as HTMLButtonElement,
       micToggle: this.rootEl.querySelector('#mic-toggle') as HTMLButtonElement,
       cameraToggle: this.rootEl.querySelector('#camera-toggle') as HTMLButtonElement,
     };
 
     this.ui.joinButton.onclick = () => { this.joinRoom(); };
+    this.ui.leaveButton.onclick = () => { this.leaveRoom(); };
     this.ui.micToggle.onclick = () => { this.toggleMic(); };
     this.ui.cameraToggle.onclick = () => { this.toggleCamera(); };
 

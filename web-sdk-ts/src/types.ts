@@ -4,10 +4,10 @@ import { TrackLabel } from '@livedigital/client/dist/types/common';
 import type Peer from './Peer';
 
 export type PeerCallbacks = {
-  onTrackStart?(track: PeerTrack): void;
-  onTrackEnd?(track: PeerTrack): void;
-  onTrackPaused?(track: PeerTrack): void;
-  onTrackResumed?(track: PeerTrack): void;
+  onTrackStart?(track: PeerTrack, peer: Peer): void;
+  onTrackEnd?(track: PeerTrack, peer: Peer): void;
+  onTrackPaused?(track: PeerTrack, peer: Peer): void;
+  onTrackResumed?(track: PeerTrack, peer: Peer): void;
 };
 
 export interface PublisherStoreConstructor {

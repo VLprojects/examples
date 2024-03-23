@@ -52,22 +52,22 @@ class Peer {
     this.peer.observer.on('track-start', (track: PeerTrack) => {
       const mediaTrack = new MediaTrack(this, track);
       this.setMediaTrack(mediaTrack);
-      this.callbacks.onTrackStart?.(track);
+      this.callbacks.onTrackStart?.(track, this);
     });
 
     this.peer.observer.on('track-end', (track: PeerTrack) => {
       this.removeMediaTrack(track.label);
-      this.callbacks.onTrackEnd?.(track);
+      this.callbacks.onTrackEnd?.(track, this);
     });
 
     this.peer.observer.on('track-paused', (track: PeerTrack) => {
       this.mediaTracks.get(track.label)?.setIsPaused(true);
-      this.callbacks.onTrackPaused?.(track);
+      this.callbacks.onTrackPaused?.(track, this);
     });
 
     this.peer.observer.on('track-resumed', (track: PeerTrack) => {
       this.mediaTracks.get(track.label)?.setIsPaused(false);
-      this.callbacks.onTrackResumed?.(track);
+      this.callbacks.onTrackResumed?.(track, this);
     });
   }
 
