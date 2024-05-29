@@ -80,10 +80,10 @@
   dependencies:
     "@lezer/common" "^0.15.0"
 
-"@livedigital/client@^3.14.2":
-  version "3.14.2"
-  resolved "https://registry.yarnpkg.com/@livedigital/client/-/client-3.14.2.tgz#0b4cefe9274d105563773905cf6a77446dd1e51e"
-  integrity sha512-jVYrR+fzCS9ntHP8gQOUVMRC1Oe2/GXzGYI4hwD3C061qAqE8+NpUxzjv3uSCNHvOho6xEonnm6EP6qOAUYJGw==
+"@livedigital/client@^3.18.0":
+  version "3.18.0"
+  resolved "https://registry.yarnpkg.com/@livedigital/client/-/client-3.18.0.tgz#cef434ece9d4b8e5c40e0b58aafea8d83218c3b0"
+  integrity sha512-af8W3EX/OgHtRxNAQKTlwLgm33yW8d6UoShJ40/pKhSYOarbcnllMUwxtt/Mj52F/e1lKUH5zUHb87tz+VL13A==
   dependencies:
     async-mutex "^0.3.2"
     awaitqueue "^2.4.0"
@@ -91,7 +91,8 @@
     bowser "^2.11.0"
     debug "^4.3.4"
     fflate "^0.8.2"
-    mediasoup-client "^3.6.103"
+    hash-sum "^2.0.0"
+    mediasoup-client "3.7.4"
     qs "^6.11.0"
     serialize-error "^7.0.1"
     socket.io-client "^4.7.2"
@@ -752,10 +753,24 @@
   dependencies:
     "@types/ms" "*"
 
+"@types/jsonwebtoken@^9.0.6":
+  version "9.0.6"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.6.tgz#d1af3544d99ad992fb6681bbe60676e06b032bd3"
+  integrity sha512-/5hndP5dCjloafCXns6SZyESp3Ldq7YjH3zwzwczYnjxIT0Fqzk5ROSYVGfFyczIue7IUEj8hkvLbPoLQ18vQw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/ms@*":
   version "0.7.31"
   resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.31.tgz#31b7ca6407128a3d2bbc27fe2d21b345397f6197"
   integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
+
+"@types/node@*":
+  version "20.12.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.12.12.tgz#7cbecdf902085cec634fdb362172dfe12b8f2050"
+  integrity sha512-eWLDGF/FOSPtAvEqeRAQ4C8LSA7M1I7i0ky1I8U7kD1J5ITyW3AsRhQrKVoWf5pFKZ2kILsEGJhsI9r93PYnOw==
+  dependencies:
+    undici-types "~5.26.4"
 
 abortcontroller-polyfill@^1.1.9:
   version "1.7.5"
@@ -1476,6 +1491,11 @@ hash-base@~3.0:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
+hash-sum@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/hash-sum/-/hash-sum-2.0.0.tgz#81d01bb5de8ea4a214ad5d6ead1b523460b0b45a"
+  integrity sha512-WdZTbAByD+pHfl/g9QSsBIIwy8IT+EsPiKDs0KNX+zSHhdDLFKdZu0BQHljvO+0QI/BasbMSUa8wYNCZTvhslg==
+
 hash.js@^1.0.0, hash.js@^1.0.3:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/hash.js/-/hash.js-1.1.7.tgz#0babca538e8d4ee4a0f8988d68866537a003cf42"
@@ -1779,10 +1799,10 @@ mdn-data@2.0.14:
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.14.tgz#7113fc4281917d63ce29b43446f701e68c25ba50"
   integrity sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==
 
-mediasoup-client@^3.6.103:
-  version "3.7.6"
-  resolved "https://registry.yarnpkg.com/mediasoup-client/-/mediasoup-client-3.7.6.tgz#3dbd73ffe30c37852134d527b82e5eb3e90fe9e3"
-  integrity sha512-QZ2Dva38KLOuFle9fg+hgiWMJJhxa1NM3b08zzAnx/1xIEFILqxZN/wgwG/aKMqVA2Qf3MNLcbkTlxpZNr5koQ==
+mediasoup-client@3.7.4:
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/mediasoup-client/-/mediasoup-client-3.7.4.tgz#379b60742ec350a1546b490f7719725f3dbb984a"
+  integrity sha512-mO0M0EMu8ZT4J5Sr2vfDxE115p9NuNwBlgXmJmnqE+aQjb/J9I8G1Di5SYYT1Ge7DC8AN/wczdtZcic2+uG0yg==
   dependencies:
     "@types/debug" "^4.1.12"
     awaitqueue "^3.0.2"
@@ -2324,6 +2344,11 @@ ua-parser-js@^1.0.37:
   version "1.0.37"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-1.0.37.tgz#b5dc7b163a5c1f0c510b08446aed4da92c46373f"
   integrity sha512-bhTyI94tZofjo+Dn8SN6Zv8nBDvyXTymAdM3LDI/0IboIUwTu1rEhW7v2TfiVsoYWgkQ4kOVqnI8APUFbIQIFQ==
+
+undici-types@~5.26.4:
+  version "5.26.5"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
+  integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
 
 update-browserslist-db@^1.0.10:
   version "1.0.11"

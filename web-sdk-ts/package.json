@@ -10,6 +10,7 @@
     "dev": "parcel public/index.html --https --host dev.livedigital.space --port 3000 --open"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "buffer": "^5.5.0",
     "crypto-browserify": "^3.12.0",
     "parcel": "^2.0.0",
@@ -20,7 +21,7 @@
     "vm-browserify": "^1.1.2"
   },
   "dependencies": {
-    "@livedigital/client": "^3.14.2",
+    "@livedigital/client": "^3.18.0",
     "jsonwebtoken": "8.5.1"
   }
 }
