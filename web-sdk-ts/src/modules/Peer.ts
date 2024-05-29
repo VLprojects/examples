@@ -2,7 +2,7 @@
 import type PeerTrack from '@livedigital/client/dist/engine/media/tracks/PeerTrack';
 import type ClientPeer from '@livedigital/client/dist/engine/Peer';
 import { TrackLabel, PayloadOfPublishedMedia, PayloadOfUnpublishedMedia } from '@livedigital/client/dist/types/common';
-import { PeerCallbacks } from './types';
+import type { PeerCallbacks } from '../types';
 import Publisher from './Publisher';
 import MediaTrack from './MediaTrack';
 
