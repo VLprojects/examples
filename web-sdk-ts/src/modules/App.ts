@@ -115,12 +115,12 @@ class App {
 
   private async leaveRoom() {
     const myVideoEl = this.rootEl?.querySelector<HTMLVideoElement>('#me-video');
-    if (!myVideoEl) {
+    if (myVideoEl) {
       myVideoEl.srcObject = null;
     }
 
     const remoteVideoEl = this.rootEl?.querySelector<HTMLVideoElement>('#remote-video');
-    if (!remoteVideoEl) {
+    if (remoteVideoEl) {
       remoteVideoEl.srcObject = null;
     }
 
@@ -178,6 +178,10 @@ class App {
   }
 
   private async initMediaDevices() {
+    if (!this.client) {
+      return;
+    }
+
     try {
       this.devices = await this.client.detectDevices();
       console.log('Available devices', this.devices);
@@ -190,7 +194,7 @@ class App {
     this.ui.micToggle.disabled = true;
     try {
       if (this.devices.audio.length && !this.micTrack) {
-        this.micTrack = await this.client?.createMicrophoneAudioTrack({ audio: { deviceId: 'default' } });
+        this.micTrack = await this.client?.createMicrophoneAudioTrack({ audio: { deviceId: 'default' } }) ?? null;
       }
 
       await (this.micTrack?.isPublished ? this.micTrack.resume() : await this.micTrack?.publish());
