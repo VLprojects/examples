@@ -1,0 +1,20 @@
+{
+  "name": "livedigital-web-sdk-react-example",
+  "private": true,
+  "version": "0.0.0",
+  "license": "MIT",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "yarn workspace server dev & yarn workspace client dev",
+    "build": "yarn workspace client build",
+    "start": "yarn workspace server start",
+    "lint": "yarn workspace client lint && yarn workspace client lint:fsd",
+    "typecheck": "yarn workspace client typecheck && yarn workspace server typecheck"
+  }
+}
