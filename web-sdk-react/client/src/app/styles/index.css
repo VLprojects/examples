@@ -325,3 +325,127 @@ h1 {
     --columns: 1 !important;
   }
 }
+
+.lobby {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.preview__video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.preview__placeholder {
+  margin: 0;
+  padding: 16px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.preview__toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.level-meter {
+  overflow: hidden;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg);
+}
+
+.level-meter__bar {
+  height: 100%;
+  background: var(--success);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.08s linear;
+}
+
+.peer-tile--speaking {
+  border-color: var(--success);
+  box-shadow: 0 0 0 2px var(--success);
+}
+
+.peer-tile__hand {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 55%);
+  font-size: 20px;
+}
+
+.video--contain {
+  object-fit: contain;
+}
+
+.stage {
+  height: 100%;
+}
+
+.stage--presentation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 12px;
+}
+
+.stage__strip {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.stage__strip .peer-tile {
+  flex: none;
+  aspect-ratio: 16 / 10;
+}
+
+.stage__strip .peer-tile__avatar {
+  width: 48px;
+  height: 48px;
+  font-size: 20px;
+}
+
+.device-settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  max-width: 720px;
+  margin: 0 auto 12px;
+}
+
+@media (max-width: 640px) {
+  .stage--presentation {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) 120px;
+  }
+
+  .stage__strip {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .stage__strip .peer-tile {
+    height: 100%;
+  }
+}

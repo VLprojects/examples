@@ -9,7 +9,7 @@ interface MediaToggleProps {
 
 export function MediaToggle({ kind }: MediaToggleProps) {
   const { t } = useTranslation();
-  const isOn = useLocalMediaStore(({ tracks }) => Boolean(tracks[kind]));
+  const isOn = useLocalMediaStore(({ enabled }) => enabled[kind]);
   const isPending = useLocalMediaStore(({ pending }) => Boolean(pending[kind]));
   const toggle = useLocalMediaStore((state) => state.toggle);
 

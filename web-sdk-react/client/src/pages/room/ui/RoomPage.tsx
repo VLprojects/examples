@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { useSessionStore } from '@/entities/session';
-import { JoinRoomForm } from '@/features/join-room';
 import { ControlBar } from '@/widgets/control-bar';
 import { Header } from '@/widgets/header';
+import { Lobby } from '@/widgets/lobby';
 import { VideoGrid } from '@/widgets/video-grid';
 
 export function RoomPage() {
@@ -16,7 +16,7 @@ export function RoomPage() {
       <div className="page">
         <Header />
         <main className="page__center">
-          <JoinRoomForm key={status} alias={alias} />
+          <Lobby key={status} alias={alias} />
         </main>
       </div>
     );
