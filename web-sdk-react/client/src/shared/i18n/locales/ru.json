@@ -60,5 +60,29 @@
     "microphone": "Микрофон",
     "speaker": "Динамик",
     "none": "Устройства не найдены"
+  },
+  "effects": {
+    "title": "Эффекты",
+    "background": "Фон",
+    "backgrounds": {
+      "none": "Без эффекта",
+      "blurLight": "Лёгкое размытие",
+      "blurStrong": "Сильное размытие",
+      "slate": "Тёмно-синий фон",
+      "sage": "Зелёный фон",
+      "image": "Своё изображение"
+    },
+    "enhancements": "Улучшения",
+    "enhancement": {
+      "beautification": "Сгладить кожу",
+      "lowLight": "Осветлить тёмный кадр",
+      "colorCorrection": "Цветокоррекция"
+    },
+    "audio": "Звук",
+    "noiseSuppression": "Шумоподавление",
+    "noiseSuppressionHint": "Шумоподавление включится после входа в звонок.",
+    "noiseSuppressionFailed": "Не удалось включить шумоподавление.",
+    "loading": "Загружаем модели эффектов…",
+    "failed": "Видеоэффекты недоступны на этом устройстве."
   }
 }

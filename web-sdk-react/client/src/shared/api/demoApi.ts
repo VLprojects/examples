@@ -1,6 +1,6 @@
 import type { ClientParams } from '@livedigital/client';
 
-export type SdkConfig = Pick<ClientParams, 'signalingServerUrl' | 'analyticsApiUrl' | 'staticFilesPath'>;
+export type SdkConfig = Pick<ClientParams, 'signalingServerUrl' | 'analyticsApiUrl'> & { staticFilesPath: string };
 
 export interface JoinCredentials {
   token: string;
@@ -31,8 +31,10 @@ const request = async <T>(path: string, body?: unknown): Promise<T> => {
   return response.json() as Promise<T>;
 };
 
+let sdkConfig: Promise<SdkConfig> | undefined;
+
 export const demoApi = {
-  getSdkConfig: () => request<SdkConfig>('/config'),
+  getSdkConfig: () => (sdkConfig ??= request<SdkConfig>('/config')),
   createRoom: () => request<{ alias: string }>('/rooms', {}),
   joinRoom: (alias: string, name: string) => (
     request<JoinCredentials>(`/rooms/${encodeURIComponent(alias)}/join`, { name, role: 'host' })

@@ -1,4 +1,5 @@
 import { PhoneOff, Users } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { useSessionStore } from '@/entities/session';
@@ -10,9 +11,10 @@ import { IconButton } from '@/shared/ui';
 interface ControlBarProps {
   areParticipantsOpen: boolean;
   onToggleParticipants: () => void;
+  extraControls?: ReactNode;
 }
 
-export function ControlBar({ areParticipantsOpen, onToggleParticipants }: ControlBarProps) {
+export function ControlBar({ areParticipantsOpen, onToggleParticipants, extraControls }: ControlBarProps) {
   const { t } = useTranslation();
   const { alias } = useParams();
   const peerCount = useSessionStore((state) => state.peers.length);
@@ -33,6 +35,7 @@ export function ControlBar({ areParticipantsOpen, onToggleParticipants }: Contro
       <div className="control-bar__media">
         <MediaToggle kind="camera" />
         <MediaToggle kind="microphone" />
+        {extraControls}
         <ScreenShareToggle />
         <RaiseHandToggle />
         <IconButton tone="danger" label={t('room.leave')} onClick={() => void leave()}>
