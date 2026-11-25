@@ -1,4 +1,4 @@
-import type { ClientParams, Role } from '@livedigital/client';
+import type { ClientParams } from '@livedigital/client';
 
 export type SdkConfig = Pick<ClientParams, 'signalingServerUrl' | 'analyticsApiUrl' | 'staticFilesPath'>;
 
@@ -34,7 +34,7 @@ const request = async <T>(path: string, body?: unknown): Promise<T> => {
 export const demoApi = {
   getSdkConfig: () => request<SdkConfig>('/config'),
   createRoom: () => request<{ alias: string }>('/rooms', {}),
-  joinRoom: (alias: string, params: { name: string; role: Role }) => (
-    request<JoinCredentials>(`/rooms/${encodeURIComponent(alias)}/join`, params)
+  joinRoom: (alias: string, name: string) => (
+    request<JoinCredentials>(`/rooms/${encodeURIComponent(alias)}/join`, { name, role: 'host' })
   ),
 };

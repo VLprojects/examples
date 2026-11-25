@@ -1,5 +1,6 @@
+import { ScreenShare, ScreenShareOff } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/shared/ui';
+import { IconButton } from '@/shared/ui';
 import { useLocalMediaStore } from '../model/store';
 
 const isScreenShareSupported = Boolean(navigator.mediaDevices?.getDisplayMedia);
@@ -15,8 +16,13 @@ export function ScreenShareToggle() {
   }
 
   return (
-    <Button active={isOn} disabled={isPending} onClick={() => void toggleScreen()}>
-      {t(isOn ? 'media.screenOff' : 'media.screenOn')}
-    </Button>
+    <IconButton
+      tone={isOn ? 'accent' : 'neutral'}
+      label={t(isOn ? 'media.screenOff' : 'media.screenOn')}
+      disabled={isPending}
+      onClick={() => void toggleScreen()}
+    >
+      {isOn ? <ScreenShareOff size={20} /> : <ScreenShare size={20} />}
+    </IconButton>
   );
 }

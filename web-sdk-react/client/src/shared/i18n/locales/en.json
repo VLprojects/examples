@@ -4,51 +4,53 @@
     "source": "Source code",
     "docs": "Documentation"
   },
-  "home": {
-    "heading": "Try livedigital video calls",
-    "lead": "A reference app built on @livedigital/client. Create a room, share the link and join from another tab or device.",
-    "createRoom": "Create a room",
-    "creating": "Creating…",
-    "error": "Could not create a room. Try again."
-  },
   "join": {
-    "heading": "Join the room",
+    "headingStart": "New call",
+    "headingJoin": "Join the call",
     "name": "Your name",
     "namePlaceholder": "How should others see you?",
-    "role": "Role",
-    "roleHost": "Speaker — can publish media",
-    "roleAudience": "Viewer — watch only",
-    "submit": "Join",
+    "submitStart": "Start a call",
+    "submitJoin": "Join",
     "joining": "Joining…",
     "notFound": "This room does not exist or has been closed.",
-    "error": "Could not join the room. Try again."
+    "error": "Could not join. Try again."
   },
   "room": {
     "copyLink": "Copy invite link",
     "linkCopied": "Link copied",
-    "leave": "Leave",
+    "leave": "Leave the call",
     "you": "You",
-    "empty": "Nobody has turned the camera on yet",
+    "muted": "Microphone is off",
+    "alone": "You are the only one here. Share the link with people you want to invite.",
+    "participants": "Participants",
+    "closePanel": "Close panel",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "peerJoined": "{{name}} joined the call",
+    "peerLeft": "{{name}} left the call",
+    "rejoin": "Rejoin the call",
+    "newCall": "Start a new call",
     "status": {
-      "connecting": "Connecting…",
       "reconnecting": "Connection lost, reconnecting…",
-      "kicked": "You were disconnected from the room",
-      "error": "Connection failed"
+      "left": "You left the call",
+      "kicked": "You were removed from the call"
     },
-    "backHome": "Back to start",
     "raiseHand": "Raise hand",
     "lowerHand": "Lower hand",
     "handRaised": "Hand raised",
-    "screenOf": "{{name}} is presenting"
+    "screenOf": "{{name}} is sharing the screen",
+    "participantCount": "Participants: {{count}}"
   },
   "media": {
     "cameraOn": "Turn camera on",
     "cameraOff": "Turn camera off",
-    "microphoneOn": "Unmute",
-    "microphoneOff": "Mute",
-    "error": "No access to the device. Check browser permissions.",
+    "microphoneOn": "Turn microphone on",
+    "microphoneOff": "Turn microphone off",
+    "error": "Cannot access the device. Check browser permissions.",
     "screenOn": "Share screen",
-    "screenOff": "Stop sharing"
+    "screenOff": "Stop sharing",
+    "cameraDevices": "Choose camera",
+    "microphoneDevices": "Choose microphone and speaker"
   },
   "lobby": {
     "cameraOff": "Camera is off"
@@ -57,7 +59,6 @@
     "camera": "Camera",
     "microphone": "Microphone",
     "speaker": "Speaker",
-    "none": "No devices found",
-    "settings": "Devices"
+    "none": "No devices found"
   }
 }

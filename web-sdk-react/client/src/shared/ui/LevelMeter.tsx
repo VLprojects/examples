@@ -2,9 +2,10 @@ import { useEffect, useRef } from 'react';
 
 interface LevelMeterProps {
   track: MediaStreamTrack;
+  vertical?: boolean;
 }
 
-export function LevelMeter({ track }: LevelMeterProps) {
+export function LevelMeter({ track, vertical }: LevelMeterProps) {
   const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export function LevelMeter({ track }: LevelMeterProps) {
       const level = samples.reduce((sum, value) => sum + value, 0) / samples.length / 255;
 
       if (barRef.current) {
-        barRef.current.style.transform = `scaleX(${Math.min(1, level * 3)})`;
+        barRef.current.style.transform = `scale${vertical ? 'Y' : 'X'}(${Math.min(1, level * 3)})`;
       }
 
       frame = requestAnimationFrame(draw);
@@ -35,10 +36,10 @@ export function LevelMeter({ track }: LevelMeterProps) {
       source.disconnect();
       void context.close();
     };
-  }, [track]);
+  }, [track, vertical]);
 
   return (
-    <div className="level-meter">
+    <div className={vertical ? 'level-meter level-meter--vertical' : 'level-meter'}>
       <div ref={barRef} className="level-meter__bar" />
     </div>
   );

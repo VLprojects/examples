@@ -37,6 +37,10 @@ The Personal Token is a management key: it must stay on the server and never rea
 | Lobby: camera preview, microphone level | `client/src/features/preview-media` |
 | Camera, microphone, screen sharing, device switch | `client/src/features/local-media` |
 | Raised hand through `appData` | `client/src/features/raise-hand` |
+| Creating a room and joining it | `client/src/features/join-room` |
+| Join and leave notifications | `client/src/features/room-notifications` |
+| Call layout: grid, pinned participant, screen share | `client/src/widgets/stage` |
+| Settings panel shared by the lobby and the call | `client/src/widgets/media-settings` |
 | Playing remote audio, output device | `client/src/shared/ui/AudioView.tsx` |
 
 ## Production build
@@ -85,6 +89,10 @@ Personal Token — управляющий ключ: он живёт только
 | Лобби: превью камеры, уровень микрофона | `client/src/features/preview-media` |
 | Камера, микрофон, демонстрация экрана, смена устройства | `client/src/features/local-media` |
 | Поднятая рука через `appData` | `client/src/features/raise-hand` |
+| Создание комнаты и вход | `client/src/features/join-room` |
+| Уведомления о входе и выходе участников | `client/src/features/room-notifications` |
+| Сцена звонка: сетка, закреплённый участник, демонстрация | `client/src/widgets/stage` |
+| Панель настроек, общая для лобби и звонка | `client/src/widgets/media-settings` |
 | Воспроизведение звука участников, устройство вывода | `client/src/shared/ui/AudioView.tsx` |
 
 ## Сборка для продакшена

@@ -1,25 +1,23 @@
-import { useState } from 'react';
+import { PhoneOff, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 import { useSessionStore } from '@/entities/session';
-import { DeviceSettings, MediaToggle, ScreenShareToggle, useLocalMediaStore } from '@/features/local-media';
+import { CopyLinkButton } from '@/features/copy-invite-link';
+import { MediaToggle, ScreenShareToggle, useLocalMediaStore } from '@/features/local-media';
 import { RaiseHandToggle } from '@/features/raise-hand';
-import { getSdkClient } from '@/shared/sdk';
-import { Button } from '@/shared/ui';
+import { IconButton } from '@/shared/ui';
 
-export function ControlBar() {
+interface ControlBarProps {
+  areParticipantsOpen: boolean;
+  onToggleParticipants: () => void;
+}
+
+export function ControlBar({ areParticipantsOpen, onToggleParticipants }: ControlBarProps) {
   const { t } = useTranslation();
+  const { alias } = useParams();
+  const peerCount = useSessionStore((state) => state.peers.length);
   const disconnect = useSessionStore((state) => state.disconnect);
   const resetLocalMedia = useLocalMediaStore((state) => state.reset);
-  const hasMediaFailed = useLocalMediaStore((state) => state.failed);
-  const [isLinkCopied, setIsLinkCopied] = useState(false);
-  const [areSettingsOpen, setAreSettingsOpen] = useState(false);
-  const canPublish = getSdkClient().peers.some((peer) => peer.isMe && peer.role === 'host');
-
-  const copyLink = async () => {
-    await navigator.clipboard.writeText(window.location.href);
-    setIsLinkCopied(true);
-    setTimeout(() => setIsLinkCopied(false), 2000);
-  };
 
   const leave = async () => {
     await disconnect();
@@ -28,22 +26,29 @@ export function ControlBar() {
 
   return (
     <footer className="control-bar">
-      {hasMediaFailed && <p className="error control-bar__error">{t('media.error')}</p>}
-      {areSettingsOpen && <DeviceSettings />}
-      <div className="control-bar__buttons">
-        {canPublish && (
-          <>
-            <MediaToggle kind="microphone" />
-            <MediaToggle kind="camera" />
-            <ScreenShareToggle />
-            <RaiseHandToggle />
-            <Button active={areSettingsOpen} onClick={() => setAreSettingsOpen(!areSettingsOpen)}>
-              {t('devices.settings')}
-            </Button>
-          </>
-        )}
-        <Button onClick={() => void copyLink()}>{t(isLinkCopied ? 'room.linkCopied' : 'room.copyLink')}</Button>
-        <Button variant="danger" onClick={() => void leave()}>{t('room.leave')}</Button>
+      <div className="control-bar__room">
+        <span className="control-bar__alias">{alias}</span>
+        <CopyLinkButton compact />
+      </div>
+      <div className="control-bar__media">
+        <MediaToggle kind="camera" />
+        <MediaToggle kind="microphone" />
+        <ScreenShareToggle />
+        <RaiseHandToggle />
+        <IconButton tone="danger" label={t('room.leave')} onClick={() => void leave()}>
+          <PhoneOff size={20} />
+        </IconButton>
+      </div>
+      <div className="control-bar__panels">
+        <IconButton
+          tone={areParticipantsOpen ? 'accent' : 'neutral'}
+          label={t('room.participants')}
+          aria-expanded={areParticipantsOpen}
+          onClick={onToggleParticipants}
+        >
+          <Users size={20} />
+          <span className="icon-button__badge">{peerCount}</span>
+        </IconButton>
       </div>
     </footer>
   );
