@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { bindDeviceEvents } from '@/entities/device';
 import { bindSessionEvents } from '@/entities/session';
 import { bindLocalMediaEvents } from '@/features/local-media';
-import { bindNoiseSuppressionEvents } from '@/features/noise-suppression';
+import { bindNoiseSuppressionEvents, createNoiseSuppressionParams } from '@/features/noise-suppression';
 import { bindRoomNotifications } from '@/features/room-notifications';
 import { bindVideoEffectsEvents, createEffectsSdkParams } from '@/features/video-effects';
 import { demoApi } from '@/shared/api';
@@ -16,7 +16,7 @@ const [sdkConfig] = await Promise.all([demoApi.getSdkConfig(), initI18n()]);
 
 const client = createSdkClient({
   ...sdkConfig,
-  denoiser: 'rnnoise',
+  ...createNoiseSuppressionParams(sdkConfig.staticFilesPath),
   effectsSDKParams: createEffectsSdkParams(sdkConfig.staticFilesPath),
   logLevel: 4,
 });

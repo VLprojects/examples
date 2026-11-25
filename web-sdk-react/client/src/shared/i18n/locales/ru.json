@@ -63,26 +63,90 @@
   },
   "effects": {
     "title": "Эффекты",
-    "background": "Фон",
-    "backgrounds": {
-      "none": "Без эффекта",
-      "blurLight": "Лёгкое размытие",
-      "blurStrong": "Сильное размытие",
-      "slate": "Тёмно-синий фон",
-      "sage": "Зелёный фон",
-      "image": "Своё изображение"
-    },
-    "enhancements": "Улучшения",
-    "enhancement": {
-      "beautification": "Сгладить кожу",
-      "lowLight": "Осветлить тёмный кадр",
-      "colorCorrection": "Цветокоррекция"
-    },
-    "audio": "Звук",
-    "noiseSuppression": "Шумоподавление",
-    "noiseSuppressionHint": "Шумоподавление включится после входа в звонок.",
-    "noiseSuppressionFailed": "Не удалось включить шумоподавление.",
+    "close": "Закрыть",
+    "reset": "Сбросить всё",
+    "off": "Выкл",
+    "retry": "Повторить",
+    "cameraOff": "Включите камеру, чтобы увидеть эффекты. Настройки сохранятся.",
+    "previewCaption": "Так вас видят другие",
     "loading": "Загружаем модели эффектов…",
-    "failed": "Видеоэффекты недоступны на этом устройстве."
+    "failed": "Не удалось применить эффекты.",
+    "tabs": {
+      "background": "Фон",
+      "picture": "Картинка",
+      "frame": "Кадр"
+    },
+    "background": {
+      "title": "Фон",
+      "none": "Без фона",
+      "blur": "Размытие",
+      "color": "Цвет",
+      "uploaded": "Своё",
+      "upload": "Загрузить",
+      "blurStrength": "Сила размытия",
+      "customColor": "Свой цвет",
+      "layoutHint": "Выберите фон, чтобы настроить положение в кадре.",
+      "images": {
+        "dawn": "Рассвет",
+        "ocean": "Океан",
+        "forest": "Лес",
+        "graphite": "Графит"
+      }
+    },
+    "layout": {
+      "title": "Положение в кадре",
+      "left-bottom": "Слева",
+      "center": "По центру",
+      "right-bottom": "Справа"
+    },
+    "picture": {
+      "beautification": "Сглаживание кожи",
+      "lowLight": "Осветление тёмного кадра",
+      "colorCorrection": "Цветокоррекция",
+      "sharpness": "Резкость"
+    },
+    "filter": {
+      "title": "Цветовой фильтр",
+      "none": "Без фильтра",
+      "warm": "Тёплый",
+      "cool": "Холодный",
+      "vivid": "Сочный",
+      "mono": "Ч/б",
+      "power": "Сила фильтра"
+    },
+    "smartZoom": {
+      "title": "Автокадрирование",
+      "hint": "Камера сама держит лицо в кадре. Значение — доля кадра, которую занимает лицо."
+    },
+    "lowerThird": {
+      "title": "Плашка с именем",
+      "hint": "Подпись поверх видео: её увидят все участники.",
+      "template": "Шаблон",
+      "templateNumber": "Шаблон {{number}}",
+      "heading": "Заголовок",
+      "subtitle": "Подзаголовок",
+      "subtitlePlaceholder": "Должность или компания",
+      "defaultTitle": "Имя Фамилия",
+      "placement": "Расположение",
+      "color": "Цвет плашки",
+      "placements": {
+        "bottom-left": "Снизу слева",
+        "bottom-right": "Снизу справа",
+        "top-left": "Сверху слева",
+        "top-right": "Сверху справа"
+      }
+    }
+  },
+  "noiseSuppression": {
+    "title": "Шумоподавление",
+    "afterJoin": "Включится после входа в звонок.",
+    "loading": "Загружаем модель…",
+    "engine": "Работает: {{engine}}",
+    "engines": {
+      "asdk": "Audio Effects SDK",
+      "rnnoise": "RNNoise"
+    },
+    "fallback": "Основной движок шумоподавления недоступен, включён RNNoise.",
+    "failed": "Не удалось включить шумоподавление."
   }
 }

@@ -37,8 +37,8 @@ The Personal Token is a management key: it must stay on the server and never rea
 | Lobby: camera preview, microphone level | `client/src/features/preview-media` |
 | Camera, microphone, screen sharing, device switch | `client/src/features/local-media` |
 | Raised hand through `appData` | `client/src/features/raise-hand` |
-| Background blur, virtual background, picture enhancements | `client/src/features/video-effects` |
-| Noise suppression | `client/src/features/noise-suppression` |
+| Video effects: blur, virtual background, position in the frame, picture enhancements, LUT color filters, auto framing, lower third | `client/src/features/video-effects` |
+| Noise suppression: Audio Effects SDK with a fallback to RNNoise | `client/src/features/noise-suppression` |
 | Creating a room and joining it | `client/src/features/join-room` |
 | Join and leave notifications | `client/src/features/room-notifications` |
 | Call layout: grid, pinned participant, screen share | `client/src/widgets/stage` |
@@ -91,8 +91,8 @@ Personal Token — управляющий ключ: он живёт только
 | Лобби: превью камеры, уровень микрофона | `client/src/features/preview-media` |
 | Камера, микрофон, демонстрация экрана, смена устройства | `client/src/features/local-media` |
 | Поднятая рука через `appData` | `client/src/features/raise-hand` |
-| Размытие и замена фона, улучшения картинки | `client/src/features/video-effects` |
-| Шумоподавление | `client/src/features/noise-suppression` |
+| Видеоэффекты: размытие и замена фона, положение в кадре, улучшения картинки, цветовые LUT-фильтры, автокадрирование, плашка с именем | `client/src/features/video-effects` |
+| Шумоподавление: Audio Effects SDK с откатом на RNNoise | `client/src/features/noise-suppression` |
 | Создание комнаты и вход | `client/src/features/join-room` |
 | Уведомления о входе и выходе участников | `client/src/features/room-notifications` |
 | Сцена звонка: сетка, закреплённый участник, демонстрация | `client/src/widgets/stage` |

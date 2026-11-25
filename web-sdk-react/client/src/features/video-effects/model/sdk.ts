@@ -35,5 +35,9 @@ export const loadEffectsSdk = (): Promise<void> => {
     }
   })();
 
+  loading.catch(() => {
+    loading = undefined;
+  });
+
   return loading;
 };

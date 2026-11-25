@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import { useSessionStore } from '@/entities/session';
 import { CopyLinkButton } from '@/features/copy-invite-link';
 import { MediaToggle, ScreenShareToggle, useLocalMediaStore } from '@/features/local-media';
+import { NoiseSuppressionToggle } from '@/features/noise-suppression';
 import { RaiseHandToggle } from '@/features/raise-hand';
 import { IconButton } from '@/shared/ui';
 
@@ -34,7 +35,7 @@ export function ControlBar({ areParticipantsOpen, onToggleParticipants, extraCon
       </div>
       <div className="control-bar__media">
         <MediaToggle kind="camera" />
-        <MediaToggle kind="microphone" />
+        <MediaToggle kind="microphone" menuExtra={<NoiseSuppressionToggle isPublishing />} />
         {extraControls}
         <ScreenShareToggle />
         <RaiseHandToggle />

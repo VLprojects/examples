@@ -1,8 +1,14 @@
 export { AudioView } from './AudioView';
 export { Button } from './Button';
+export { Carousel } from './Carousel';
+export { Dialog } from './Dialog';
 export { IconButton } from './IconButton';
 export { LevelMeter } from './LevelMeter';
+export { OptionTile } from './OptionTile';
 export { Popover } from './Popover';
+export { Segmented } from './Segmented';
+export { Slider } from './Slider';
+export { Tabs } from './Tabs';
 export { showToast } from './toast/store';
 export { Toaster } from './toast/Toaster';
 export { VideoView } from './VideoView';

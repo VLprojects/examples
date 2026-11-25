@@ -7,12 +7,14 @@ const STORAGE_KEY = 'sdk-demo:noise-suppression';
 interface NoiseSuppressionState {
   isEnabled: boolean;
   isInitializing: boolean;
+  engine: string | undefined;
   toggle: () => void;
 }
 
 export const useNoiseSuppressionStore = create<NoiseSuppressionState>((set) => ({
   isEnabled: localStorage.getItem(STORAGE_KEY) !== 'off',
   isInitializing: false,
+  engine: undefined,
 
   toggle: () => set(({ isEnabled }) => {
     localStorage.setItem(STORAGE_KEY, isEnabled ? 'off' : 'on');
@@ -26,8 +28,20 @@ export const bindNoiseSuppressionEvents = (client: Client) => {
     useNoiseSuppressionStore.setState({ isInitializing });
   });
 
+  client.observer.on('denoiser-enabled', ({ type }) => {
+    useNoiseSuppressionStore.setState({ engine: type });
+  });
+
+  client.observer.on('denoiser-disabled', () => {
+    useNoiseSuppressionStore.setState({ engine: undefined });
+  });
+
+  client.observer.on('denoiser-fallback', () => {
+    showToast('noiseSuppression.fallback');
+  });
+
   client.observer.on('denoiser-failed', () => {
-    useNoiseSuppressionStore.setState({ isEnabled: false });
-    showToast('effects.noiseSuppressionFailed', { tone: 'error' });
+    useNoiseSuppressionStore.setState({ isEnabled: false, engine: undefined });
+    showToast('noiseSuppression.failed', { tone: 'error' });
   });
 };
