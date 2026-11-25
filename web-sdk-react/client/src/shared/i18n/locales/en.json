@@ -1,0 +1,47 @@
+{
+  "app": {
+    "title": "livedigital SDK demo",
+    "source": "Source code",
+    "docs": "Documentation"
+  },
+  "home": {
+    "heading": "Try livedigital video calls",
+    "lead": "A reference app built on @livedigital/client. Create a room, share the link and join from another tab or device.",
+    "createRoom": "Create a room",
+    "creating": "Creating…",
+    "error": "Could not create a room. Try again."
+  },
+  "join": {
+    "heading": "Join the room",
+    "name": "Your name",
+    "namePlaceholder": "How should others see you?",
+    "role": "Role",
+    "roleHost": "Speaker — can publish media",
+    "roleAudience": "Viewer — watch only",
+    "submit": "Join",
+    "joining": "Joining…",
+    "notFound": "This room does not exist or has been closed.",
+    "error": "Could not join the room. Try again."
+  },
+  "room": {
+    "copyLink": "Copy invite link",
+    "linkCopied": "Link copied",
+    "leave": "Leave",
+    "you": "You",
+    "empty": "Nobody has turned the camera on yet",
+    "status": {
+      "connecting": "Connecting…",
+      "reconnecting": "Connection lost, reconnecting…",
+      "kicked": "You were disconnected from the room",
+      "error": "Connection failed"
+    },
+    "backHome": "Back to start"
+  },
+  "media": {
+    "cameraOn": "Turn camera on",
+    "cameraOff": "Turn camera off",
+    "microphoneOn": "Unmute",
+    "microphoneOff": "Mute",
+    "error": "No access to the device. Check browser permissions."
+  }
+}
