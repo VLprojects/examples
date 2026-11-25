@@ -60,5 +60,29 @@
     "microphone": "Microphone",
     "speaker": "Speaker",
     "none": "No devices found"
+  },
+  "effects": {
+    "title": "Effects",
+    "background": "Background",
+    "backgrounds": {
+      "none": "No effect",
+      "blurLight": "Light blur",
+      "blurStrong": "Strong blur",
+      "slate": "Dark blue background",
+      "sage": "Green background",
+      "image": "Your image"
+    },
+    "enhancements": "Enhancements",
+    "enhancement": {
+      "beautification": "Smooth skin",
+      "lowLight": "Brighten a dark picture",
+      "colorCorrection": "Color correction"
+    },
+    "audio": "Audio",
+    "noiseSuppression": "Noise suppression",
+    "noiseSuppressionHint": "Noise suppression turns on after you join the call.",
+    "noiseSuppressionFailed": "Could not turn on noise suppression.",
+    "loading": "Loading effect models…",
+    "failed": "Video effects are not available on this device."
   }
 }

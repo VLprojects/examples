@@ -2,8 +2,10 @@ import { X } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSessionStore } from '@/entities/session';
+import { useLocalMediaStore } from '@/features/local-media';
 import { IconButton } from '@/shared/ui';
 import { ControlBar } from '@/widgets/control-bar';
+import { EffectsMenu } from '@/widgets/effects-menu';
 import { ParticipantList } from '@/widgets/participant-list';
 import { Stage } from '@/widgets/stage';
 
@@ -11,6 +13,7 @@ export function CallView() {
   const { t } = useTranslation();
   const isReconnecting = useSessionStore((state) => state.status === 'reconnecting');
   const peerCount = useSessionStore((state) => state.peers.length);
+  const tracks = useLocalMediaStore((state) => state.tracks);
   const [areParticipantsOpen, setAreParticipantsOpen] = useState(false);
 
   return (
@@ -35,6 +38,7 @@ export function CallView() {
       <ControlBar
         areParticipantsOpen={areParticipantsOpen}
         onToggleParticipants={() => setAreParticipantsOpen(!areParticipantsOpen)}
+        extraControls={<EffectsMenu cameraTrack={tracks.camera} publishedMicrophoneTrack={tracks.microphone} />}
       />
     </div>
   );

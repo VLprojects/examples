@@ -6,10 +6,11 @@ interface PopoverProps {
   label: string;
   icon: ReactNode;
   className?: string;
+  tone?: 'neutral' | 'accent';
   children: ReactNode;
 }
 
-export function Popover({ label, icon, className, children }: PopoverProps) {
+export function Popover({ label, icon, className, tone, children }: PopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -44,6 +45,7 @@ export function Popover({ label, icon, className, children }: PopoverProps) {
     <div ref={containerRef} className="popover">
       <IconButton
         className={className}
+        tone={tone}
         label={label}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
