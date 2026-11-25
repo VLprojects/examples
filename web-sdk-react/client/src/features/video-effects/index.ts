@@ -1,4 +1,7 @@
 export { createEffectsSdkParams } from './model/sdk';
-export { bindVideoEffectsEvents, useVideoEffectsStore } from './model/store';
+export { bindVideoEffectsEvents, selectActiveTabs, useVideoEffectsStore } from './model/store';
+export type { EffectsTab } from './model/store';
 export { useVideoEffects } from './model/useVideoEffects';
-export { VideoEffectsPicker } from './ui/VideoEffectsPicker';
+export { BackgroundSettings } from './ui/BackgroundSettings';
+export { FrameSettings } from './ui/FrameSettings';
+export { PictureSettings } from './ui/PictureSettings';

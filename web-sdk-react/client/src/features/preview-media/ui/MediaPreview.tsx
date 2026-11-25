@@ -1,35 +1,23 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DeviceControl } from '@/entities/device';
-import { getSdkClient } from '@/shared/sdk';
+import { useMediaStreamTrack } from '@/shared/sdk';
 import { VideoView } from '@/shared/ui';
 import { usePreviewStore } from '../model/store';
 import type { PreviewKind } from '../model/store';
 
 const KINDS: PreviewKind[] = ['camera', 'microphone'];
 
-const PROCESSED_TRACK_EVENTS = ['effects-enabled', 'effects-disabled'] as const;
-
 interface MediaPreviewProps {
   extraControls?: ReactNode;
+  microphoneMenuExtra?: ReactNode;
 }
 
-export function MediaPreview({ extraControls }: MediaPreviewProps) {
+export function MediaPreview({ extraControls, microphoneMenuExtra }: MediaPreviewProps) {
   const { t } = useTranslation();
   const { enabled, tracks, failed, start, stop, toggle, restart } = usePreviewStore();
-
-  const [, rerender] = useReducer((revision: number) => revision + 1, 0);
-
-  useEffect(() => {
-    const { observer } = getSdkClient();
-
-    PROCESSED_TRACK_EVENTS.forEach((event) => observer.on(event, rerender));
-
-    return () => {
-      PROCESSED_TRACK_EVENTS.forEach((event) => observer.off(event, rerender));
-    };
-  }, []);
+  const cameraTrack = useMediaStreamTrack(tracks.camera);
 
   useEffect(() => {
     void start();
@@ -41,8 +29,8 @@ export function MediaPreview({ extraControls }: MediaPreviewProps) {
 
   return (
     <section className="preview">
-      {tracks.camera
-        ? <VideoView track={tracks.camera.mediaStreamTrack} mirrored />
+      {cameraTrack
+        ? <VideoView track={cameraTrack} mirrored />
         : <p className="preview__placeholder">{t(failed.camera ? 'media.error' : 'lobby.cameraOff')}</p>}
       {failed.microphone && <p className="preview__notice">{t('media.error')}</p>}
       <div className="preview__controls">
@@ -52,6 +40,7 @@ export function MediaPreview({ extraControls }: MediaPreviewProps) {
             kind={kind}
             isOn={enabled[kind]}
             microphoneTrack={tracks.microphone?.mediaStreamTrack}
+            menuExtra={kind === 'microphone' && microphoneMenuExtra}
             onToggle={() => void toggle(kind)}
             onDeviceChange={() => void restart(kind)}
           />

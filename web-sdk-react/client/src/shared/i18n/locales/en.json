@@ -63,26 +63,90 @@
   },
   "effects": {
     "title": "Effects",
-    "background": "Background",
-    "backgrounds": {
-      "none": "No effect",
-      "blurLight": "Light blur",
-      "blurStrong": "Strong blur",
-      "slate": "Dark blue background",
-      "sage": "Green background",
-      "image": "Your image"
-    },
-    "enhancements": "Enhancements",
-    "enhancement": {
-      "beautification": "Smooth skin",
-      "lowLight": "Brighten a dark picture",
-      "colorCorrection": "Color correction"
-    },
-    "audio": "Audio",
-    "noiseSuppression": "Noise suppression",
-    "noiseSuppressionHint": "Noise suppression turns on after you join the call.",
-    "noiseSuppressionFailed": "Could not turn on noise suppression.",
+    "close": "Close",
+    "reset": "Reset all",
+    "off": "Off",
+    "retry": "Retry",
+    "cameraOff": "Turn the camera on to see the effects. Your settings are kept.",
+    "previewCaption": "This is how others see you",
     "loading": "Loading effect models…",
-    "failed": "Video effects are not available on this device."
+    "failed": "Could not apply the effects.",
+    "tabs": {
+      "background": "Background",
+      "picture": "Picture",
+      "frame": "Frame"
+    },
+    "background": {
+      "title": "Background",
+      "none": "No background",
+      "blur": "Blur",
+      "color": "Color",
+      "uploaded": "Yours",
+      "upload": "Upload",
+      "blurStrength": "Blur strength",
+      "customColor": "Custom color",
+      "layoutHint": "Pick a background to adjust your position in the frame.",
+      "images": {
+        "dawn": "Dawn",
+        "ocean": "Ocean",
+        "forest": "Forest",
+        "graphite": "Graphite"
+      }
+    },
+    "layout": {
+      "title": "Position in the frame",
+      "left-bottom": "Left",
+      "center": "Center",
+      "right-bottom": "Right"
+    },
+    "picture": {
+      "beautification": "Skin smoothing",
+      "lowLight": "Low light boost",
+      "colorCorrection": "Color correction",
+      "sharpness": "Sharpness"
+    },
+    "filter": {
+      "title": "Color filter",
+      "none": "No filter",
+      "warm": "Warm",
+      "cool": "Cool",
+      "vivid": "Vivid",
+      "mono": "B&W",
+      "power": "Filter strength"
+    },
+    "smartZoom": {
+      "title": "Auto framing",
+      "hint": "The camera keeps your face in the frame. The value is the share of the frame your face takes."
+    },
+    "lowerThird": {
+      "title": "Name plate",
+      "hint": "A caption over your video: everyone in the call sees it.",
+      "template": "Template",
+      "templateNumber": "Template {{number}}",
+      "heading": "Title",
+      "subtitle": "Subtitle",
+      "subtitlePlaceholder": "Job title or company",
+      "defaultTitle": "First Last",
+      "placement": "Placement",
+      "color": "Plate color",
+      "placements": {
+        "bottom-left": "Bottom left",
+        "bottom-right": "Bottom right",
+        "top-left": "Top left",
+        "top-right": "Top right"
+      }
+    }
+  },
+  "noiseSuppression": {
+    "title": "Noise suppression",
+    "afterJoin": "Turns on after you join the call.",
+    "loading": "Loading the model…",
+    "engine": "Running: {{engine}}",
+    "engines": {
+      "asdk": "Audio Effects SDK",
+      "rnnoise": "RNNoise"
+    },
+    "fallback": "The main noise suppression engine is unavailable, switched to RNNoise.",
+    "failed": "Could not turn on noise suppression."
   }
 }

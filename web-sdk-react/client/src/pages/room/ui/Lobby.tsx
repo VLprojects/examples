@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router';
 import { useSessionStore } from '@/entities/session';
 import { JoinRoomForm } from '@/features/join-room';
 import { useLocalMediaStore } from '@/features/local-media';
+import { NoiseSuppressionToggle } from '@/features/noise-suppression';
 import { MediaPreview, usePreviewStore } from '@/features/preview-media';
-import { EffectsMenu } from '@/widgets/effects-menu';
+import { EffectsButton } from '@/widgets/effects-dialog';
 
 interface LobbyProps {
   alias?: string;
@@ -29,7 +30,10 @@ export function Lobby({ alias }: LobbyProps) {
   return (
     <div className="lobby">
       <h1>{t(alias ? 'join.headingJoin' : 'join.headingStart')}</h1>
-      <MediaPreview extraControls={<EffectsMenu cameraTrack={previewCamera} />} />
+      <MediaPreview
+        extraControls={<EffectsButton cameraTrack={previewCamera} />}
+        microphoneMenuExtra={<NoiseSuppressionToggle isPublishing={false} />}
+      />
       <JoinRoomForm
         alias={alias}
         onRoomCreated={(createdAlias) => void navigate(`/r/${createdAlias}`, { replace: true })}

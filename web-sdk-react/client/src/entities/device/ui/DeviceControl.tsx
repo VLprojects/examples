@@ -1,4 +1,5 @@
 import { ChevronUp, Mic, MicOff, Video, VideoOff } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IconButton, LevelMeter, Popover } from '@/shared/ui';
 import { DeviceList } from './DeviceList';
@@ -8,6 +9,7 @@ interface DeviceControlProps {
   isOn: boolean;
   disabled?: boolean;
   microphoneTrack?: MediaStreamTrack;
+  menuExtra?: ReactNode;
   onToggle: () => void;
   onDeviceChange: (deviceId: string) => void;
 }
@@ -17,7 +19,9 @@ const ICONS = {
   camera: { on: Video, off: VideoOff },
 };
 
-export function DeviceControl({ kind, isOn, disabled, microphoneTrack, onToggle, onDeviceChange }: DeviceControlProps) {
+export function DeviceControl({
+  kind, isOn, disabled, microphoneTrack, menuExtra, onToggle, onDeviceChange,
+}: DeviceControlProps) {
   const { t } = useTranslation();
   const Icon = ICONS[kind][isOn ? 'on' : 'off'];
   const levelTrack = kind === 'microphone' && isOn ? microphoneTrack : undefined;
@@ -41,6 +45,7 @@ export function DeviceControl({ kind, isOn, disabled, microphoneTrack, onToggle,
             <DeviceList kind="speaker" />
           </>
         )}
+        {menuExtra}
       </Popover>
     </div>
   );

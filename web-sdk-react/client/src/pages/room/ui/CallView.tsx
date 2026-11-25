@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSessionStore } from '@/entities/session';
 import { useLocalMediaStore } from '@/features/local-media';
+import { useNoiseSuppression } from '@/features/noise-suppression';
 import { IconButton } from '@/shared/ui';
 import { ControlBar } from '@/widgets/control-bar';
-import { EffectsMenu } from '@/widgets/effects-menu';
+import { EffectsButton } from '@/widgets/effects-dialog';
 import { ParticipantList } from '@/widgets/participant-list';
 import { Stage } from '@/widgets/stage';
 
@@ -14,7 +15,10 @@ export function CallView() {
   const isReconnecting = useSessionStore((state) => state.status === 'reconnecting');
   const peerCount = useSessionStore((state) => state.peers.length);
   const tracks = useLocalMediaStore((state) => state.tracks);
+  const displayName = useSessionStore(({ appData }) => appData.displayName);
   const [areParticipantsOpen, setAreParticipantsOpen] = useState(false);
+
+  useNoiseSuppression(tracks.microphone);
 
   return (
     <div className="call">
@@ -38,7 +42,7 @@ export function CallView() {
       <ControlBar
         areParticipantsOpen={areParticipantsOpen}
         onToggleParticipants={() => setAreParticipantsOpen(!areParticipantsOpen)}
-        extraControls={<EffectsMenu cameraTrack={tracks.camera} publishedMicrophoneTrack={tracks.microphone} />}
+        extraControls={<EffectsButton cameraTrack={tracks.camera} displayName={typeof displayName === 'string' ? displayName : undefined} />}
       />
     </div>
   );
