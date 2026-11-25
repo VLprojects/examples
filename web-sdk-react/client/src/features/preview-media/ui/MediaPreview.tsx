@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DeviceSelect } from '@/entities/device';
-import { Button, LevelMeter, VideoView } from '@/shared/ui';
+import { DeviceControl } from '@/entities/device';
+import { VideoView } from '@/shared/ui';
 import { usePreviewStore } from '../model/store';
 import type { PreviewKind } from '../model/store';
 
-const KINDS: PreviewKind[] = ['microphone', 'camera'];
+const KINDS: PreviewKind[] = ['camera', 'microphone'];
 
 export function MediaPreview() {
   const { t } = useTranslation();
@@ -20,24 +20,23 @@ export function MediaPreview() {
   }, [start, stop]);
 
   return (
-    <section className="card preview">
-      <div className="preview__video">
-        {tracks.camera
-          ? <VideoView track={tracks.camera.mediaStreamTrack} mirrored />
-          : <p className="preview__placeholder">{t(failed.camera ? 'media.error' : 'lobby.cameraOff')}</p>}
-      </div>
-      {tracks.microphone && <LevelMeter track={tracks.microphone.mediaStreamTrack} />}
-      {failed.microphone && <p className="error">{t('media.error')}</p>}
-      <div className="preview__toggles">
+    <section className="preview">
+      {tracks.camera
+        ? <VideoView track={tracks.camera.mediaStreamTrack} mirrored />
+        : <p className="preview__placeholder">{t(failed.camera ? 'media.error' : 'lobby.cameraOff')}</p>}
+      {failed.microphone && <p className="preview__notice">{t('media.error')}</p>}
+      <div className="preview__controls">
         {KINDS.map((kind) => (
-          <Button key={kind} active={enabled[kind]} onClick={() => void toggle(kind)}>
-            {t(`media.${kind}${enabled[kind] ? 'Off' : 'On'}`)}
-          </Button>
+          <DeviceControl
+            key={kind}
+            kind={kind}
+            isOn={enabled[kind]}
+            microphoneTrack={tracks.microphone?.mediaStreamTrack}
+            onToggle={() => void toggle(kind)}
+            onDeviceChange={() => void restart(kind)}
+          />
         ))}
       </div>
-      <DeviceSelect kind="camera" onSelect={() => void restart('camera')} />
-      <DeviceSelect kind="microphone" onSelect={() => void restart('microphone')} />
-      <DeviceSelect kind="speaker" />
     </section>
   );
 }

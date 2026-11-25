@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { bindDeviceEvents } from '@/entities/device';
 import { bindSessionEvents } from '@/entities/session';
 import { bindLocalMediaEvents } from '@/features/local-media';
+import { bindRoomNotifications } from '@/features/room-notifications';
 import { demoApi } from '@/shared/api';
 import { initI18n } from '@/shared/i18n';
 import { createSdkClient } from '@/shared/sdk';
@@ -16,6 +17,7 @@ const client = createSdkClient({ ...sdkConfig, logLevel: 4 });
 bindSessionEvents(client);
 bindDeviceEvents(client);
 bindLocalMediaEvents(client);
+bindRoomNotifications(client);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

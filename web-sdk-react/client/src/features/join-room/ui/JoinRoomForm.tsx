@@ -1,7 +1,7 @@
-import type { Role } from '@livedigital/client';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 import { useSessionStore } from '@/entities/session';
 import { demoApi, DemoApiError } from '@/shared/api';
 import { Button } from '@/shared/ui';
@@ -9,16 +9,16 @@ import { Button } from '@/shared/ui';
 const NAME_STORAGE_KEY = 'sdk-demo:name';
 
 interface JoinRoomFormProps {
-  alias: string;
+  alias?: string;
+  onRoomCreated: (alias: string) => void;
   beforeJoin?: () => Promise<void>;
-  afterJoin?: (role: Role) => Promise<void>;
+  afterJoin?: () => Promise<void>;
 }
 
-export function JoinRoomForm({ alias, beforeJoin, afterJoin }: JoinRoomFormProps) {
+export function JoinRoomForm({ alias, onRoomCreated, beforeJoin, afterJoin }: JoinRoomFormProps) {
   const { t } = useTranslation();
   const connect = useSessionStore((state) => state.connect);
   const [name, setName] = useState(() => localStorage.getItem(NAME_STORAGE_KEY) ?? '');
-  const [role, setRole] = useState<Role>('host');
   const [isJoining, setIsJoining] = useState(false);
   const [errorKey, setErrorKey] = useState<'join.notFound' | 'join.error'>();
 
@@ -32,12 +32,18 @@ export function JoinRoomForm({ alias, beforeJoin, afterJoin }: JoinRoomFormProps
     setErrorKey(undefined);
 
     try {
+      const roomAlias = alias ?? (await demoApi.createRoom()).alias;
+
+      if (!alias) {
+        onRoomCreated(roomAlias);
+      }
+
       await beforeJoin?.();
       await connect({
-        getToken: async () => (await demoApi.joinRoom(alias, { name: displayName, role })).token,
+        getToken: async () => (await demoApi.joinRoom(roomAlias, displayName)).token,
         appData: { displayName },
       });
-      await afterJoin?.(role);
+      await afterJoin?.();
     } catch (error) {
       setErrorKey(error instanceof DemoApiError && error.status === 404 ? 'join.notFound' : 'join.error');
       setIsJoining(false);
@@ -45,8 +51,7 @@ export function JoinRoomForm({ alias, beforeJoin, afterJoin }: JoinRoomFormProps
   };
 
   return (
-    <form className="card form" onSubmit={(event) => void submit(event)}>
-      <h1>{t('join.heading')}</h1>
+    <form className="form" onSubmit={(event) => void submit(event)}>
       <label className="field">
         <span>{t('join.name')}</span>
         <input
@@ -58,17 +63,11 @@ export function JoinRoomForm({ alias, beforeJoin, afterJoin }: JoinRoomFormProps
           required
         />
       </label>
-      <label className="field">
-        <span>{t('join.role')}</span>
-        <select value={role} onChange={(event) => setRole(event.target.value as Role)}>
-          <option value="host">{t('join.roleHost')}</option>
-          <option value="audience">{t('join.roleAudience')}</option>
-        </select>
-      </label>
       <Button type="submit" variant="primary" disabled={isJoining || !name.trim()}>
-        {t(isJoining ? 'join.joining' : 'join.submit')}
+        {t(isJoining ? 'join.joining' : alias ? 'join.submitJoin' : 'join.submitStart')}
       </Button>
       {errorKey && <p className="error">{t(errorKey)}</p>}
+      {errorKey === 'join.notFound' && <Link to="/" onClick={() => setErrorKey(undefined)}>{t('room.newCall')}</Link>}
     </form>
   );
 }

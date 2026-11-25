@@ -2,7 +2,7 @@ import type { Client, Peer } from '@livedigital/client';
 import { create } from 'zustand';
 import { getSdkClient } from '@/shared/sdk';
 
-export type SessionStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'kicked' | 'error';
+export type SessionStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'left' | 'kicked' | 'error';
 
 type AppData = Record<string, unknown>;
 
@@ -19,6 +19,7 @@ interface SessionState {
   presenterId: string | undefined;
   connect: (params: ConnectParams) => Promise<void>;
   disconnect: () => Promise<void>;
+  reset: () => void;
   updateAppData: (patch: AppData) => Promise<void>;
   refreshPresenter: () => void;
 }
@@ -70,8 +71,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   disconnect: async () => {
     getToken = undefined;
     await getSdkClient().leave();
-    set({ status: 'idle', ...IDLE_STATE });
+    set({ status: 'left', ...IDLE_STATE });
   },
+
+  reset: () => set({ status: 'idle' }),
 
   updateAppData: async (patch) => {
     const appData = { ...get().appData, ...patch };

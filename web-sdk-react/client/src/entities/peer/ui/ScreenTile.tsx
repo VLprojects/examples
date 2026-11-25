@@ -14,7 +14,7 @@ export function ScreenTile({ peer }: ScreenTileProps) {
   const { displayName } = usePeerAppData(peer);
 
   return (
-    <div className="peer-tile peer-tile--screen">
+    <div className="peer-tile peer-tile--main">
       {screen && <VideoView track={screen.mediaStreamTrack} contain />}
       <div className="peer-tile__caption">{t('room.screenOf', { name: displayName })}</div>
     </div>

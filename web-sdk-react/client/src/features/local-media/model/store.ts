@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { useDeviceStore } from '@/entities/device';
 import { useSessionStore } from '@/entities/session';
 import { getSdkClient } from '@/shared/sdk';
+import { showToast } from '@/shared/ui';
 
 export type LocalMediaKind = 'camera' | 'microphone';
 
@@ -11,7 +12,6 @@ interface LocalMediaState {
   enabled: Record<LocalMediaKind, boolean>;
   screenTracks: Track[];
   pending: Partial<Record<LocalMediaKind | 'screen', boolean>>;
-  failed: boolean;
   start: (initial: Record<LocalMediaKind, boolean>) => Promise<void>;
   toggle: (kind: LocalMediaKind) => Promise<void>;
   changeDevice: (kind: LocalMediaKind, deviceId: string) => Promise<void>;
@@ -24,7 +24,6 @@ const INITIAL_STATE = {
   enabled: { camera: false, microphone: false },
   screenTracks: [],
   pending: {},
-  failed: false,
 };
 
 const createTrack = (kind: LocalMediaKind): Promise<Track> => {
@@ -43,12 +42,12 @@ export const useLocalMediaStore = create<LocalMediaState>((set, get) => {
       return;
     }
 
-    set(({ pending }) => ({ pending: { ...pending, [key]: true }, failed: false }));
+    set(({ pending }) => ({ pending: { ...pending, [key]: true } }));
 
     try {
       await operation();
     } catch {
-      set({ failed: true });
+      showToast('media.error', { tone: 'error' });
     } finally {
       set(({ pending }) => ({ pending: { ...pending, [key]: false } }));
     }
