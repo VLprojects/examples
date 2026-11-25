@@ -4,42 +4,63 @@ import { getSdkClient } from '@/shared/sdk';
 
 export type SessionStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'kicked' | 'error';
 
+type AppData = Record<string, unknown>;
+
 interface ConnectParams {
   getToken: () => Promise<string>;
-  appData: Record<string, unknown>;
+  appData: AppData;
 }
 
 interface SessionState {
   status: SessionStatus;
   peers: Peer[];
+  appData: AppData;
+  activeSpeakerId: string | undefined;
+  presenterId: string | undefined;
   connect: (params: ConnectParams) => Promise<void>;
   disconnect: () => Promise<void>;
+  updateAppData: (patch: AppData) => Promise<void>;
+  refreshPresenter: () => void;
 }
 
-let connectParams: ConnectParams | undefined;
+const IDLE_STATE = { peers: [], appData: {}, activeSpeakerId: undefined, presenterId: undefined };
 
-const join = async () => {
-  if (!connectParams) {
+let getToken: ConnectParams['getToken'] | undefined;
+
+const join = async (appData: AppData) => {
+  if (!getToken) {
     return;
   }
 
   const client = getSdkClient();
-  const token = await connectParams.getToken();
+  const token = await getToken();
 
-  await client.join({ token, appData: connectParams.appData });
+  await client.join({ token, appData });
   await client.requestChannelStateSync();
 };
 
-export const useSessionStore = create<SessionState>((set) => ({
-  status: 'idle',
-  peers: [],
+const isPublisher = (peer: Peer) => peer.role === 'host';
 
-  connect: async (params) => {
-    connectParams = params;
-    set({ status: 'connecting' });
+const findPresenterId = () => getSdkClient().peers.find(
+  (peer) => peer.publishedMedia.some(({ label }) => label === 'screen-video'),
+)?.id;
+
+export const useSessionStore = create<SessionState>((set, get) => ({
+  status: 'idle',
+  ...IDLE_STATE,
+
+  connect: async ({ getToken: tokenProvider, appData }) => {
+    const client = getSdkClient();
+    const synced = new Promise<void>((resolve) => {
+      client.observer.once('channel-state-synced', () => resolve());
+    });
+
+    getToken = tokenProvider;
+    set({ status: 'connecting', appData });
 
     try {
-      await join();
+      await join(appData);
+      await synced;
     } catch (error) {
       set({ status: 'error' });
       throw error;
@@ -47,39 +68,53 @@ export const useSessionStore = create<SessionState>((set) => ({
   },
 
   disconnect: async () => {
-    connectParams = undefined;
+    getToken = undefined;
     await getSdkClient().leave();
-    set({ status: 'idle', peers: [] });
+    set({ status: 'idle', ...IDLE_STATE });
   },
+
+  updateAppData: async (patch) => {
+    const appData = { ...get().appData, ...patch };
+
+    await getSdkClient().updateAppData(appData);
+    set({ appData });
+  },
+
+  refreshPresenter: () => set({ presenterId: findPresenterId() }),
 }));
 
-const isPublisher = (peer: Peer) => peer.role === 'host';
+const watchedPeers = new WeakSet<Peer>();
 
-const subscribedPeers = new WeakSet<Peer>();
-
-const subscribeToPeerMedia = (peer: Peer) => {
-  if (peer.isMe || subscribedPeers.has(peer)) {
+const watchPeer = (peer: Peer) => {
+  if (watchedPeers.has(peer)) {
     return;
   }
 
-  subscribedPeers.add(peer);
+  watchedPeers.add(peer);
 
+  const { refreshPresenter } = useSessionStore.getState();
   const subscribe = ({ producerId }: { producerId: string }) => {
-    void peer.subscribe({ producerId });
+    if (!peer.isMe) {
+      void peer.subscribe({ producerId });
+    }
   };
 
-  peer.observer.on('media-published', subscribe);
+  peer.observer.on('media-published', (media) => {
+    subscribe(media);
+    refreshPresenter();
+  });
+  peer.observer.on('media-unpublished', refreshPresenter);
   peer.publishedMedia.forEach(subscribe);
 };
 
 export const bindSessionEvents = (client: Client) => {
-  const { setState } = useSessionStore;
+  const { setState, getState } = useSessionStore;
 
   client.observer.on('channel-state-synced', () => {
     const peers = client.peers.filter(isPublisher);
 
-    peers.forEach(subscribeToPeerMedia);
-    setState({ status: 'connected', peers });
+    peers.forEach(watchPeer);
+    setState({ status: 'connected', peers, presenterId: findPresenterId() });
   });
 
   client.observer.on('peer-joined', (peer) => {
@@ -87,24 +122,26 @@ export const bindSessionEvents = (client: Client) => {
       return;
     }
 
-    subscribeToPeerMedia(peer);
+    watchPeer(peer);
     setState(({ peers }) => ({ peers: peers.some(({ id }) => id === peer.id) ? peers : [...peers, peer] }));
   });
 
   client.observer.on('peer-left', (peerId) => {
-    setState(({ peers }) => ({ peers: peers.filter(({ id }) => id !== peerId) }));
+    setState(({ peers }) => ({ peers: peers.filter(({ id }) => id !== peerId), presenterId: findPresenterId() }));
   });
+
+  client.observer.on('active-speaker-changed', ({ peer }) => setState({ activeSpeakerId: peer?.id }));
 
   client.observer.on('connection-lost', () => setState({ status: 'reconnecting' }));
   client.observer.on('connection-restored', () => setState({ status: 'connected' }));
 
   client.observer.on('channel-rejoin-required', () => {
-    join().catch(() => setState({ status: 'error' }));
+    join(getState().appData).catch(() => setState({ status: 'error' }));
   });
 
   client.observer.on('forced-disconnect', () => {
-    connectParams = undefined;
-    setState({ status: 'kicked', peers: [] });
+    getToken = undefined;
+    setState({ status: 'kicked', ...IDLE_STATE });
   });
 
   client.observer.on('reject-unauthorized', () => setState({ status: 'error' }));

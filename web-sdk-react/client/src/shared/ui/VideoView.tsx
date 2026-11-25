@@ -3,10 +3,12 @@ import { useEffect, useRef } from 'react';
 interface VideoViewProps {
   track: MediaStreamTrack;
   mirrored?: boolean;
+  contain?: boolean;
 }
 
-export function VideoView({ track, mirrored }: VideoViewProps) {
+export function VideoView({ track, mirrored, contain }: VideoViewProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const className = ['video', mirrored && 'video--mirrored', contain && 'video--contain'].filter(Boolean).join(' ');
 
   useEffect(() => {
     const video = videoRef.current;
@@ -23,13 +25,5 @@ export function VideoView({ track, mirrored }: VideoViewProps) {
     };
   }, [track]);
 
-  return (
-    <video
-      ref={videoRef}
-      className={mirrored ? 'video video--mirrored' : 'video'}
-      autoPlay
-      playsInline
-      muted
-    />
-  );
+  return <video ref={videoRef} className={className} autoPlay playsInline muted />;
 }

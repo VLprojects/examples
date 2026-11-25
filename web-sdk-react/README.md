@@ -33,7 +33,11 @@ The Personal Token is a management key: it must stay on the server and never rea
 | Single `Client` instance | `client/src/shared/sdk` |
 | Join, state sync, reconnect, subscriptions | `client/src/entities/session` |
 | Rendering participants and their tracks | `client/src/entities/peer` |
-| Publishing camera and microphone | `client/src/features/local-media` |
+| Device lists and selection | `client/src/entities/device` |
+| Lobby: camera preview, microphone level | `client/src/features/preview-media` |
+| Camera, microphone, screen sharing, device switch | `client/src/features/local-media` |
+| Raised hand through `appData` | `client/src/features/raise-hand` |
+| Playing remote audio, output device | `client/src/shared/ui/AudioView.tsx` |
 
 ## Production build
 
@@ -77,7 +81,11 @@ Personal Token — управляющий ключ: он живёт только
 | Единственный экземпляр `Client` | `client/src/shared/sdk` |
 | Вход, синхронизация состояния, реконнект, подписки | `client/src/entities/session` |
 | Отрисовка участников и их треков | `client/src/entities/peer` |
-| Публикация камеры и микрофона | `client/src/features/local-media` |
+| Списки устройств и выбор | `client/src/entities/device` |
+| Лобби: превью камеры, уровень микрофона | `client/src/features/preview-media` |
+| Камера, микрофон, демонстрация экрана, смена устройства | `client/src/features/local-media` |
+| Поднятая рука через `appData` | `client/src/features/raise-hand` |
+| Воспроизведение звука участников, устройство вывода | `client/src/shared/ui/AudioView.tsx` |
 
 ## Сборка для продакшена
 

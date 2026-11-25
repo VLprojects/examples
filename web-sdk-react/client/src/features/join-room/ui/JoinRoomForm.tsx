@@ -10,9 +10,11 @@ const NAME_STORAGE_KEY = 'sdk-demo:name';
 
 interface JoinRoomFormProps {
   alias: string;
+  beforeJoin?: () => Promise<void>;
+  afterJoin?: (role: Role) => Promise<void>;
 }
 
-export function JoinRoomForm({ alias }: JoinRoomFormProps) {
+export function JoinRoomForm({ alias, beforeJoin, afterJoin }: JoinRoomFormProps) {
   const { t } = useTranslation();
   const connect = useSessionStore((state) => state.connect);
   const [name, setName] = useState(() => localStorage.getItem(NAME_STORAGE_KEY) ?? '');
@@ -30,10 +32,12 @@ export function JoinRoomForm({ alias }: JoinRoomFormProps) {
     setErrorKey(undefined);
 
     try {
+      await beforeJoin?.();
       await connect({
         getToken: async () => (await demoApi.joinRoom(alias, { name: displayName, role })).token,
         appData: { displayName },
       });
+      await afterJoin?.(role);
     } catch (error) {
       setErrorKey(error instanceof DemoApiError && error.status === 404 ? 'join.notFound' : 'join.error');
       setIsJoining(false);

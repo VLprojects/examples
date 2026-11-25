@@ -35,13 +35,29 @@
       "kicked": "You were disconnected from the room",
       "error": "Connection failed"
     },
-    "backHome": "Back to start"
+    "backHome": "Back to start",
+    "raiseHand": "Raise hand",
+    "lowerHand": "Lower hand",
+    "handRaised": "Hand raised",
+    "screenOf": "{{name}} is presenting"
   },
   "media": {
     "cameraOn": "Turn camera on",
     "cameraOff": "Turn camera off",
     "microphoneOn": "Unmute",
     "microphoneOff": "Mute",
-    "error": "No access to the device. Check browser permissions."
+    "error": "No access to the device. Check browser permissions.",
+    "screenOn": "Share screen",
+    "screenOff": "Stop sharing"
+  },
+  "lobby": {
+    "cameraOff": "Camera is off"
+  },
+  "devices": {
+    "camera": "Camera",
+    "microphone": "Microphone",
+    "speaker": "Speaker",
+    "none": "No devices found",
+    "settings": "Devices"
   }
 }

@@ -440,10 +440,10 @@
   resolved "https://registry.yarnpkg.com/@keyv/serialize/-/serialize-1.1.1.tgz#0c01dd3a3483882af7cf3878d4e71d505c81fc4a"
   integrity sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==
 
-"@livedigital/client@3.63.2":
-  version "3.63.2"
-  resolved "https://registry.yarnpkg.com/@livedigital/client/-/client-3.63.2.tgz#1a60d0f638aa776c0b4470eac408fdda07895109"
-  integrity sha512-yZjOezbALnHk7bg82OY5nX5V9gx4LnMKqIBuZEXL6pJ04zgMi6xWrytld+tYrT+CXAqsUS4nXpBLNZa3fj/jVg==
+"@livedigital/client@3.63.3":
+  version "3.63.3"
+  resolved "https://registry.yarnpkg.com/@livedigital/client/-/client-3.63.3.tgz#c22a7013c5d59a6f71e219bd28151af53091bbe9"
+  integrity sha512-Jcy8tRjj60061vvsOHfi6FM/e5AQhKNlEThZIvAJPXYCzu0VdVvQVIc7vsrVSRONsoV0/xwonoDhBAUZ7URZkA==
   dependencies:
     async-mutex "^0.5.0"
     awaitqueue "^2.4.0"

@@ -11,7 +11,7 @@
     "lint:fsd": "steiger src"
   },
   "dependencies": {
-    "@livedigital/client": "3.63.2",
+    "@livedigital/client": "3.63.3",
     "events": "^3.3.0",
     "i18next": "^27.2.2",
     "react": "^19.3.1",

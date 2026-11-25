@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSessionStore } from '@/entities/session';
-import { MediaToggle, useLocalMediaStore } from '@/features/local-media';
+import { DeviceSettings, MediaToggle, ScreenShareToggle, useLocalMediaStore } from '@/features/local-media';
+import { RaiseHandToggle } from '@/features/raise-hand';
 import { getSdkClient } from '@/shared/sdk';
 import { Button } from '@/shared/ui';
 
@@ -11,6 +12,7 @@ export function ControlBar() {
   const resetLocalMedia = useLocalMediaStore((state) => state.reset);
   const hasMediaFailed = useLocalMediaStore((state) => state.failed);
   const [isLinkCopied, setIsLinkCopied] = useState(false);
+  const [areSettingsOpen, setAreSettingsOpen] = useState(false);
   const canPublish = getSdkClient().peers.some((peer) => peer.isMe && peer.role === 'host');
 
   const copyLink = async () => {
@@ -27,11 +29,17 @@ export function ControlBar() {
   return (
     <footer className="control-bar">
       {hasMediaFailed && <p className="error control-bar__error">{t('media.error')}</p>}
+      {areSettingsOpen && <DeviceSettings />}
       <div className="control-bar__buttons">
         {canPublish && (
           <>
             <MediaToggle kind="microphone" />
             <MediaToggle kind="camera" />
+            <ScreenShareToggle />
+            <RaiseHandToggle />
+            <Button active={areSettingsOpen} onClick={() => setAreSettingsOpen(!areSettingsOpen)}>
+              {t('devices.settings')}
+            </Button>
           </>
         )}
         <Button onClick={() => void copyLink()}>{t(isLinkCopied ? 'room.linkCopied' : 'room.copyLink')}</Button>
