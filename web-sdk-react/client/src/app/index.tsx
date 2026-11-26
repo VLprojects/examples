@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { bindDeviceEvents } from '@/entities/device';
 import { bindSessionEvents } from '@/entities/session';
+import { bindEventLog } from '@/features/event-log';
 import { bindLocalMediaEvents } from '@/features/local-media';
 import { bindNetworkQualityEvents } from '@/features/network-quality';
 import { bindNoiseSuppressionEvents, createNoiseSuppressionParams } from '@/features/noise-suppression';
@@ -25,6 +26,7 @@ const client = createSdkClient({
   logLevel: 4,
 });
 
+bindEventLog(client);
 bindSessionEvents(client);
 bindDeviceEvents(client);
 bindLocalMediaEvents(client);
