@@ -6,6 +6,8 @@ import { useLocalMediaStore } from '@/features/local-media';
 import { useNoiseSuppression } from '@/features/noise-suppression';
 import { IconButton } from '@/shared/ui';
 import { ControlBar } from '@/widgets/control-bar';
+import type { SidePanel } from '@/widgets/control-bar';
+import { DevPanel } from '@/widgets/dev-panel';
 import { EffectsButton } from '@/widgets/effects-dialog';
 import { ParticipantList } from '@/widgets/participant-list';
 import { Stage } from '@/widgets/stage';
@@ -16,7 +18,7 @@ export function CallView() {
   const peerCount = useSessionStore((state) => state.peers.length);
   const tracks = useLocalMediaStore((state) => state.tracks);
   const displayName = useSessionStore(({ appData }) => appData.displayName);
-  const [areParticipantsOpen, setAreParticipantsOpen] = useState(false);
+  const [sidePanel, setSidePanel] = useState<SidePanel>();
 
   useNoiseSuppression(tracks.microphone);
 
@@ -27,21 +29,21 @@ export function CallView() {
         <main className="call__stage">
           <Stage />
         </main>
-        {areParticipantsOpen && (
-          <aside className="side-panel">
+        {sidePanel && (
+          <aside className={`side-panel side-panel--${sidePanel}`}>
             <header className="side-panel__header">
-              <h2>{t('room.participantCount', { count: peerCount })}</h2>
-              <IconButton size="small" label={t('room.closePanel')} onClick={() => setAreParticipantsOpen(false)}>
+              <h2>{sidePanel === 'dev' ? t('dev.title') : t('room.participantCount', { count: peerCount })}</h2>
+              <IconButton size="small" label={t('room.closePanel')} onClick={() => setSidePanel(undefined)}>
                 <X size={16} />
               </IconButton>
             </header>
-            <ParticipantList />
+            {sidePanel === 'dev' ? <DevPanel /> : <ParticipantList />}
           </aside>
         )}
       </div>
       <ControlBar
-        areParticipantsOpen={areParticipantsOpen}
-        onToggleParticipants={() => setAreParticipantsOpen(!areParticipantsOpen)}
+        sidePanel={sidePanel}
+        onToggleSidePanel={(panel) => setSidePanel(sidePanel === panel ? undefined : panel)}
         extraControls={<EffectsButton cameraTrack={tracks.camera} isPublishing displayName={typeof displayName === 'string' ? displayName : undefined} />}
       />
     </div>

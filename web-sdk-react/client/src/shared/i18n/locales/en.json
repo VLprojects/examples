@@ -176,5 +176,44 @@
     },
     "causedBySenders": "This looks like the other participants' network: their sending is poor.",
     "hint": "Rated by packet loss, latency and jitter — separately for sending, receiving and the device."
+  },
+  "dev": {
+    "title": "Developer",
+    "tabs": {
+      "events": "Events",
+      "connection": "Connection"
+    },
+    "events": {
+      "filter": "Filter by event name",
+      "clear": "Clear",
+      "showFrequent": "Show frequent events",
+      "empty": "No events yet.",
+      "noPayload": "no payload"
+    },
+    "connection": {
+      "outbound": "Sending",
+      "inbound": "Receiving",
+      "iceState": "ICE state",
+      "localCandidate": "Local candidate",
+      "remoteCandidate": "Remote candidate",
+      "bitrate": "Bitrate",
+      "availableBitrate": "Available bitrate",
+      "streamScores": "Stream quality",
+      "noTransport": "The transport is not created yet.",
+      "scoresHint": "Qa, Qv and Qav rate the quality of the streams (MOS, 1 to 5). They depend on the sender and the server as well; the network quality indicator shows the state of your own network.",
+      "ice": "ICE",
+      "icePolicy": "Route",
+      "policies": {
+        "all": "Any",
+        "relay": "TURN only"
+      },
+      "restartIce": "Restart ICE",
+      "failed": "The operation failed.",
+      "session": "Session",
+      "sdkVersion": "SDK version",
+      "datacenter": "Data center",
+      "node": "Node",
+      "relayEnforced": "The SDK switched to TURN on its own: a direct connection could not be established."
+    }
   }
 }

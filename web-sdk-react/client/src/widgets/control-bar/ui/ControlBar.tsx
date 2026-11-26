@@ -1,4 +1,4 @@
-import { PhoneOff, Users } from 'lucide-react';
+import { CodeXml, PhoneOff, Users } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
@@ -10,13 +10,15 @@ import { NoiseSuppressionToggle } from '@/features/noise-suppression';
 import { RaiseHandToggle } from '@/features/raise-hand';
 import { IconButton } from '@/shared/ui';
 
+export type SidePanel = 'participants' | 'dev';
+
 interface ControlBarProps {
-  areParticipantsOpen: boolean;
-  onToggleParticipants: () => void;
+  sidePanel: SidePanel | undefined;
+  onToggleSidePanel: (panel: SidePanel) => void;
   extraControls?: ReactNode;
 }
 
-export function ControlBar({ areParticipantsOpen, onToggleParticipants, extraControls }: ControlBarProps) {
+export function ControlBar({ sidePanel, onToggleSidePanel, extraControls }: ControlBarProps) {
   const { t } = useTranslation();
   const { alias } = useParams();
   const peerCount = useSessionStore((state) => state.peers.length);
@@ -47,10 +49,18 @@ export function ControlBar({ areParticipantsOpen, onToggleParticipants, extraCon
       </div>
       <div className="control-bar__panels">
         <IconButton
-          tone={areParticipantsOpen ? 'accent' : 'neutral'}
+          tone={sidePanel === 'dev' ? 'accent' : 'neutral'}
+          label={t('dev.title')}
+          aria-expanded={sidePanel === 'dev'}
+          onClick={() => onToggleSidePanel('dev')}
+        >
+          <CodeXml size={20} />
+        </IconButton>
+        <IconButton
+          tone={sidePanel === 'participants' ? 'accent' : 'neutral'}
           label={t('room.participants')}
-          aria-expanded={areParticipantsOpen}
-          onClick={onToggleParticipants}
+          aria-expanded={sidePanel === 'participants'}
+          onClick={() => onToggleSidePanel('participants')}
         >
           <Users size={20} />
           <span className="icon-button__badge">{peerCount}</span>
