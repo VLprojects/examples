@@ -19,6 +19,17 @@ export function CallView() {
   const tracks = useLocalMediaStore((state) => state.tracks);
   const displayName = useSessionStore(({ appData }) => appData.displayName);
   const [sidePanel, setSidePanel] = useState<SidePanel>();
+  const [isDevMode, setIsDevMode] = useState(false);
+
+  const toggleSidePanel = (panel: SidePanel) => {
+    const isClosing = sidePanel === panel;
+
+    if (panel === 'dev') {
+      setIsDevMode(!isClosing);
+    }
+
+    setSidePanel(isClosing ? undefined : panel);
+  };
 
   useNoiseSuppression(tracks.microphone);
 
@@ -27,7 +38,7 @@ export function CallView() {
       {isReconnecting && <div className="status-banner">{t('room.status.reconnecting')}</div>}
       <div className="call__body">
         <main className="call__stage">
-          <Stage />
+          <Stage isDevMode={isDevMode} />
         </main>
         {sidePanel && (
           <aside className={`side-panel side-panel--${sidePanel}`}>
@@ -43,7 +54,8 @@ export function CallView() {
       </div>
       <ControlBar
         sidePanel={sidePanel}
-        onToggleSidePanel={(panel) => setSidePanel(sidePanel === panel ? undefined : panel)}
+        isDevMode={isDevMode}
+        onToggleSidePanel={toggleSidePanel}
         extraControls={<EffectsButton cameraTrack={tracks.camera} isPublishing displayName={typeof displayName === 'string' ? displayName : undefined} />}
       />
     </div>

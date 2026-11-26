@@ -8,6 +8,7 @@ export { OptionTile } from './OptionTile';
 export { Popover } from './Popover';
 export { Segmented } from './Segmented';
 export { Slider } from './Slider';
+export { Sparkline } from './Sparkline';
 export { Tabs } from './Tabs';
 export { showToast } from './toast/store';
 export { Toaster } from './toast/Toaster';

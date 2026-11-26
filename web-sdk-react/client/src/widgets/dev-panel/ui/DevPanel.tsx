@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { ConnectionStats } from '@/features/connection-stats';
 import { EventLog } from '@/features/event-log';
 import { Tabs } from '@/shared/ui';
+import { ReportTab } from './ReportTab';
 
-const TABS = ['events', 'connection'] as const;
+const TABS = ['events', 'connection', 'report'] as const;
 
 type DevTab = typeof TABS[number];
 
@@ -23,6 +24,7 @@ export function DevPanel() {
       <div className="dev-panel__body" role="tabpanel" aria-label={t(`dev.tabs.${tab}`)}>
         {tab === 'events' && <EventLog />}
         {tab === 'connection' && <ConnectionStats />}
+        {tab === 'report' && <ReportTab />}
       </div>
     </div>
   );
