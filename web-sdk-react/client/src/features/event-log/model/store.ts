@@ -1,7 +1,7 @@
 import type { Client, Peer } from '@livedigital/client';
 import { create } from 'zustand';
 import { useSessionStore } from '@/entities/session';
-import { serializePayload } from './serialize';
+import { simplifyPayload } from './serialize';
 
 const CLIENT_EVENTS = [
   'channel-event',
@@ -59,7 +59,7 @@ export interface EventLogEntry {
   time: number;
   source: string;
   name: string;
-  payload: string;
+  payload: unknown;
 }
 
 interface EventLogState {
@@ -75,7 +75,7 @@ export const useEventLogStore = create<EventLogState>((set) => ({
 let nextId = 1;
 
 const record = (source: string, name: string, args: unknown[]) => {
-  const entry = { id: nextId, time: Date.now(), source, name, payload: serializePayload(args) };
+  const entry = { id: nextId, time: Date.now(), source, name, payload: simplifyPayload(args) };
 
   nextId += 1;
   useEventLogStore.setState(({ entries }) => ({ entries: [entry, ...entries].slice(0, MAX_ENTRIES) }));

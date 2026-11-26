@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/shared/ui';
+import { Button, JsonTree } from '@/shared/ui';
 import { FREQUENT_EVENTS, useEventLogStore } from '../model/store';
 
 const formatTime = (time: number) => new Date(time).toLocaleTimeString([], { hour12: false });
@@ -43,7 +43,7 @@ export function EventLog() {
                 <span className="event-log__name">{name}</span>
                 <span className="event-log__source">{source}</span>
               </summary>
-              <pre>{payload || t('dev.events.noPayload')}</pre>
+              {payload === undefined ? <pre>{t('dev.events.noPayload')}</pre> : <JsonTree data={payload} />}
             </details>
           </li>
         ))}

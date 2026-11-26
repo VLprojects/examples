@@ -7,6 +7,7 @@ import { bindLocalMediaEvents } from '@/features/local-media';
 import { bindNetworkQualityEvents } from '@/features/network-quality';
 import { bindNoiseSuppressionEvents, createNoiseSuppressionParams } from '@/features/noise-suppression';
 import { bindRoomNotifications } from '@/features/room-notifications';
+import { recordSdkLog } from '@/features/sdk-log';
 import { bindVideoEffectsEvents, createEffectsSdkParams } from '@/features/video-effects';
 import { demoApi } from '@/shared/api';
 import { initI18n } from '@/shared/i18n';
@@ -23,7 +24,9 @@ const client = createSdkClient({
   ...createNoiseSuppressionParams(sdkConfig.staticFilesPath),
   effectsSDKParams: createEffectsSdkParams(sdkConfig.staticFilesPath),
   getStatsInterval: STATS_INTERVAL_MS,
-  logLevel: 4,
+  logLevel: 7,
+  onLogMessage: recordSdkLog,
+  sendAnalytics: false,
 });
 
 bindEventLog(client);

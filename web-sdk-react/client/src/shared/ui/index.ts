@@ -3,6 +3,7 @@ export { Button } from './Button';
 export { Carousel } from './Carousel';
 export { Dialog } from './Dialog';
 export { IconButton } from './IconButton';
+export { JsonTree } from './JsonTree';
 export { LevelMeter } from './LevelMeter';
 export { OptionTile } from './OptionTile';
 export { Popover } from './Popover';
