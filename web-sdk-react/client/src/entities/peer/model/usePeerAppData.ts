@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 export interface PeerAppData {
   displayName: string;
   isHandRaised: boolean;
+  networkQuality: unknown;
 }
 
 const parse = (appData: Record<string, unknown>): PeerAppData => ({
   displayName: typeof appData.displayName === 'string' ? appData.displayName : '',
   isHandRaised: appData.isHandRaised === true,
+  networkQuality: appData.networkQuality,
 });
 
 export function usePeerAppData(peer: Peer): PeerAppData {

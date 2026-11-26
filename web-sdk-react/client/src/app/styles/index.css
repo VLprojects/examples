@@ -10,6 +10,8 @@
   --accent-hover: #6a82ff;
   --danger: #e5484d;
   --success: #3dd68c;
+  --warning: #f0b429;
+  --warning-strong: #f0803c;
   --radius: 12px;
 
   color-scheme: dark;
@@ -1340,4 +1342,59 @@ h1 {
   .control-bar .split-button__more {
     display: none;
   }
+}
+
+.network-level--unknown {
+  color: var(--text-muted);
+}
+
+.network-level--good {
+  color: var(--success);
+}
+
+.network-level--fair {
+  color: var(--warning);
+}
+
+.network-level--poor {
+  color: var(--warning-strong);
+}
+
+.network-level--bad {
+  color: var(--danger);
+}
+
+.network-quality {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+.network-quality__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  font-size: 14px;
+}
+
+.network-quality__row dd {
+  margin: 0;
+}
+
+.network-quality__score {
+  margin-left: 8px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.network-quality__reasons {
+  grid-column: 1 / -1;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.peer-tile__network {
+  display: inline-flex;
+  flex: none;
 }

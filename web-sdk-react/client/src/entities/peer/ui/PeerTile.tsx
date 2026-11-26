@@ -14,11 +14,12 @@ interface PeerTileProps {
   isMain?: boolean;
   audioOutputDeviceId?: string;
   actions?: ReactNode;
+  status?: ReactNode;
 }
 
 const AUDIO_LABELS = ['microphone', 'screen-audio'];
 
-export function PeerTile({ peer, isActiveSpeaker, isMain, audioOutputDeviceId, actions }: PeerTileProps) {
+export function PeerTile({ peer, isActiveSpeaker, isMain, audioOutputDeviceId, actions, status }: PeerTileProps) {
   const { t } = useTranslation();
   const tracks = usePeerTracks(peer);
   const { displayName, isHandRaised } = usePeerAppData(peer);
@@ -45,6 +46,7 @@ export function PeerTile({ peer, isActiveSpeaker, isMain, audioOutputDeviceId, a
       {actions && <div className="peer-tile__actions">{actions}</div>}
       <div className="peer-tile__caption">
         {!isMicrophoneOn && <MicOff size={14} className="peer-tile__muted" aria-label={t('room.muted')} />}
+        {status}
         <span className="peer-tile__name">{name}</span>
       </div>
     </div>

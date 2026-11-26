@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import { useSessionStore } from '@/entities/session';
 import { CopyLinkButton } from '@/features/copy-invite-link';
 import { MediaToggle, ScreenShareToggle, useLocalMediaStore } from '@/features/local-media';
+import { NetworkQualityIndicator } from '@/features/network-quality';
 import { NoiseSuppressionToggle } from '@/features/noise-suppression';
 import { RaiseHandToggle } from '@/features/raise-hand';
 import { IconButton } from '@/shared/ui';
@@ -32,6 +33,7 @@ export function ControlBar({ areParticipantsOpen, onToggleParticipants, extraCon
       <div className="control-bar__room">
         <span className="control-bar__alias">{alias}</span>
         <CopyLinkButton compact />
+        <NetworkQualityIndicator />
       </div>
       <div className="control-bar__media">
         <MediaToggle kind="camera" />
