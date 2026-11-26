@@ -2,9 +2,10 @@ import type { Peer } from '@livedigital/client';
 import { Copy, X } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { docsUrl } from '@/shared/config';
 import { formatBitrate, formatPercent, formatScore } from '@/shared/lib';
 import {
-  Button, IconButton, Sparkline, Tabs, showToast,
+  Button, IconButton, Sparkline, StatRow, Tabs, showToast,
 } from '@/shared/ui';
 import {
   requestKeyFrame, requestLayers, setMaxSpatialLayer, toggleReceiving,
@@ -14,7 +15,6 @@ import {
   jitterTone, limitationTone, lossTone, scoreTone,
 } from '../model/tones';
 import type { PeerDebug } from '../model/usePeerDebug';
-import { StatRow } from './StatRow';
 
 const TABS = ['overview', 'video', 'audio', 'layers', 'peer'] as const;
 
@@ -41,6 +41,32 @@ const formatLayer = ({
   maxFramerate && `${maxFramerate} fps`,
 ].filter(Boolean).join(' · ');
 
+const STATS_DOCS_URL = docsUrl('network-quality', 'низкоуровневая-статистика');
+const LAYERS_DOCS_URL = docsUrl('bandwidth-management', 'адаптивное-качество-видео-simulcast--svc');
+
+const HINT_CODE = {
+  bitrate: 'track.videoWebRTCStats.bitrate\ntrack.audioWebRTCStats.bitrate',
+  loss: 'packetsLost / (packetsReceived + packetsLost)',
+  scores: 'track.connectionScores',
+  compositeScore: 'client.scoresCalculator.calculateAVCompositeMOS(Qa, Qv)',
+  codec: '(await track.getInfo()).trackInboundStats.codec.mimeType',
+  implementation: 'track.videoWebRTCStats.decoderImplementation · encoderImplementation',
+  jitter: 'track.videoWebRTCStats.jitter',
+  freezes: 'track.videoWebRTCStats.freezeCount',
+  framesDropped: 'track.videoWebRTCStats.framesDropped',
+  qualityLimitation: 'track.videoWebRTCStats.qualityLimitationReason',
+  feedback: 'track.videoWebRTCStats.nackCount · pliCount · firCount',
+  retransmitted: 'track.videoWebRTCStats.retransmittedPacketsSent',
+  concealed: 'track.audioWebRTCStats.concealedSamples',
+  targetBitrate: 'track.audioWebRTCStats.targetBitrate',
+  currentLayer: 'track.consumer.currentSpatialLayer · currentTemporalLayer',
+  requestedLayer: 'track.requestVideoPreferredLayers({ spatialLayer, temporalLayer })',
+  layerCount: 'track.getVideoAvailableLayers()',
+  maxLayer: 'track.setMaxSpatialLayer(spatialLayer)',
+  preferredCodec: 'track.getPreferredCodec() · track.getEncodings()',
+};
+const LAYER_HINTS: (keyof typeof HINT_CODE)[] = ['currentLayer', 'requestedLayer', 'layerCount', 'maxLayer', 'preferredCodec'];
+
 const range = (length: number) => Array.from({ length }, (_, index) => index);
 
 export function TrackDebugCard({
@@ -55,6 +81,12 @@ export function TrackDebugCard({
   const isInbound = direction === 'inbound';
   const videoLoss = history.videoLossPercent.at(-1);
   const audioLoss = history.audioLossPercent.at(-1);
+
+  const hint = (id: keyof typeof HINT_CODE) => ({
+    text: t(`dev.track.hints.${id}`),
+    code: HINT_CODE[id],
+    docsUrl: LAYER_HINTS.includes(id) ? LAYERS_DOCS_URL : STATS_DOCS_URL,
+  });
 
   const copy = async () => {
     await navigator.clipboard.writeText(JSON.stringify(snapshot, null, 2));
@@ -84,6 +116,7 @@ export function TrackDebugCard({
             <StatRow
               label={t('dev.track.videoBitrate')}
               value={formatBitrate(video?.bitrate)}
+              hint={hint('bitrate')}
               chart={<Sparkline values={history.videoBitrate} label={t('dev.track.videoBitrate')} />}
             />
             <StatRow
@@ -93,13 +126,13 @@ export function TrackDebugCard({
             />
             {isInbound && (
               <>
-                <StatRow label={t('dev.track.videoLoss')} value={formatPercent(videoLoss)} tone={lossTone(videoLoss)} />
+                <StatRow label={t('dev.track.videoLoss')} value={formatPercent(videoLoss)} tone={lossTone(videoLoss)} hint={hint('loss')} />
                 <StatRow label={t('dev.track.audioLoss')} value={formatPercent(audioLoss)} tone={lossTone(audioLoss)} />
               </>
             )}
-            <StatRow label="Qa" value={formatScore(scores.Qa)} tone={scoreTone(scores.Qa)} />
+            <StatRow label="Qa" value={formatScore(scores.Qa)} tone={scoreTone(scores.Qa)} hint={hint('scores')} />
             <StatRow label="Qv" value={formatScore(scores.Qv)} tone={scoreTone(scores.Qv)} />
-            <StatRow label="Qav" value={formatScore(scores.Qav)} tone={scoreTone(scores.Qav)} />
+            <StatRow label="Qav" value={formatScore(scores.Qav)} tone={scoreTone(scores.Qav)} hint={hint('compositeScore')} />
           </dl>
         )}
         {tab === 'video' && (video ? (
@@ -113,8 +146,8 @@ export function TrackDebugCard({
               </div>
             )}
             <dl className="stats__list">
-              <StatRow label={t('dev.track.codec')} value={video.codec} />
-              <StatRow label={t(isInbound ? 'dev.track.decoder' : 'dev.track.encoder')} value={video.implementation} />
+              <StatRow label={t('dev.track.codec')} value={video.codec} hint={hint('codec')} />
+              <StatRow label={t(isInbound ? 'dev.track.decoder' : 'dev.track.encoder')} value={video.implementation} hint={hint('implementation')} />
               <StatRow label={t('dev.track.resolution')} value={formatResolution(video.width, video.height)} />
               <StatRow
                 label="fps"
@@ -134,22 +167,23 @@ export function TrackDebugCard({
                     tone={lossTone(videoLoss)}
                     chart={<Sparkline values={history.videoLossPercent} label={t('dev.track.loss')} />}
                   />
-                  <StatRow label={t('dev.track.jitter')} value={formatNumber(video.jitterMs, ' ms')} tone={jitterTone(video.jitterMs)} />
+                  <StatRow label={t('dev.track.jitter')} value={formatNumber(video.jitterMs, ' ms')} tone={jitterTone(video.jitterMs)} hint={hint('jitter')} />
                   <StatRow label={t('dev.track.packets')} value={`${formatNumber(video.packets)} / ${formatNumber(video.packetsLost)}`} />
-                  <StatRow label={t('dev.track.freezes')} value={formatNumber(video.freezeCount)} />
-                  <StatRow label={t('dev.track.framesDropped')} value={formatNumber(video.framesDropped)} />
+                  <StatRow label={t('dev.track.freezes')} value={formatNumber(video.freezeCount)} hint={hint('freezes')} />
+                  <StatRow label={t('dev.track.framesDropped')} value={formatNumber(video.framesDropped)} hint={hint('framesDropped')} />
                 </>
               ) : (
                 <>
-                  <StatRow label={t('dev.track.packetsSent')} value={`${formatNumber(video.packets)} / ${formatNumber(video.retransmittedPackets)}`} />
+                  <StatRow label={t('dev.track.packetsSent')} value={`${formatNumber(video.packets)} / ${formatNumber(video.retransmittedPackets)}`} hint={hint('retransmitted')} />
                   <StatRow
                     label={t('dev.track.qualityLimitation')}
                     value={video.qualityLimitationReason}
+                    hint={hint('qualityLimitation')}
                     tone={limitationTone(video.qualityLimitationReason)}
                   />
                 </>
               )}
-              <StatRow label="nack / pli / fir" value={`${formatNumber(video.nackCount)} / ${formatNumber(video.pliCount)} / ${formatNumber(video.firCount)}`} />
+              <StatRow label="nack / pli / fir" value={`${formatNumber(video.nackCount)} / ${formatNumber(video.pliCount)} / ${formatNumber(video.firCount)}`} hint={hint('feedback')} />
             </dl>
           </>
         ) : <p className="hint">{t('dev.track.noVideo')}</p>)}
@@ -169,7 +203,7 @@ export function TrackDebugCard({
                 value={formatBitrate(audio.bitrate)}
                 chart={<Sparkline values={history.audioBitrate} label={t('dev.track.bitrate')} />}
               />
-              {audio.targetBitrate !== undefined && <StatRow label={t('dev.track.targetBitrate')} value={formatBitrate(audio.targetBitrate)} />}
+              {audio.targetBitrate !== undefined && <StatRow label={t('dev.track.targetBitrate')} value={formatBitrate(audio.targetBitrate)} hint={hint('targetBitrate')} />}
               <StatRow
                 label={t('dev.track.level')}
                 value={<meter className="track-debug__level" min={0} max={1} value={audio.level ?? 0} />}
@@ -184,7 +218,7 @@ export function TrackDebugCard({
                   />
                   <StatRow label={t('dev.track.jitter')} value={formatNumber(audio.jitterMs, ' ms')} tone={jitterTone(audio.jitterMs)} />
                   <StatRow label={t('dev.track.packets')} value={`${formatNumber(audio.packets)} / ${formatNumber(audio.packetsLost)}`} />
-                  <StatRow label={t('dev.track.concealed')} value={formatNumber(audio.concealedSamples)} />
+                  <StatRow label={t('dev.track.concealed')} value={formatNumber(audio.concealedSamples)} hint={hint('concealed')} />
                 </>
               ) : (
                 <StatRow label={t('dev.track.packetsSent')} value={`${formatNumber(audio.packets)} / ${formatNumber(audio.retransmittedPackets)}`} />
@@ -215,10 +249,10 @@ export function TrackDebugCard({
               </label>
             </div>
             <dl className="stats__list">
-              <StatRow label={t('dev.track.currentLayer')} value={`S${inboundLayers.currentSpatialLayer} / T${inboundLayers.currentTemporalLayer}`} />
-              <StatRow label={t('dev.track.requestedLayer')} value={inboundLayers.requestedSpatialLayer === undefined ? '—' : `S${inboundLayers.requestedSpatialLayer}`} />
-              <StatRow label={t('dev.track.layerCount')} value={`${inboundLayers.spatialLayers} / ${inboundLayers.temporalLayers}`} />
-              <StatRow label={t('dev.track.maxLayer')} value={`S${inboundLayers.maxSpatialLayer}`} />
+              <StatRow label={t('dev.track.currentLayer')} value={`S${inboundLayers.currentSpatialLayer} / T${inboundLayers.currentTemporalLayer}`} hint={hint('currentLayer')} />
+              <StatRow label={t('dev.track.requestedLayer')} value={inboundLayers.requestedSpatialLayer === undefined ? '—' : `S${inboundLayers.requestedSpatialLayer}`} hint={hint('requestedLayer')} />
+              <StatRow label={t('dev.track.layerCount')} value={`${inboundLayers.spatialLayers} / ${inboundLayers.temporalLayers}`} hint={hint('layerCount')} />
+              <StatRow label={t('dev.track.maxLayer')} value={`S${inboundLayers.maxSpatialLayer}`} hint={hint('maxLayer')} />
               {inboundLayers.available.map((layer, index) => (
                 <StatRow key={index} label={`S${index}`} value={formatLayer(layer)} />
               ))}
@@ -243,7 +277,7 @@ export function TrackDebugCard({
               </div>
             )}
             <dl className="stats__list">
-              <StatRow label={t('dev.track.preferredCodec')} value={outboundLayers.preferredCodec} />
+              <StatRow label={t('dev.track.preferredCodec')} value={outboundLayers.preferredCodec} hint={hint('preferredCodec')} />
               {outboundLayers.encodings.map((layer, index) => (
                 <StatRow key={index} label={`S${index}`} value={formatLayer(layer)} />
               ))}
