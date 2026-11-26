@@ -15,8 +15,8 @@ interface EffectsSettingsProps {
 export function EffectsSettings({ displayName }: EffectsSettingsProps) {
   const { t } = useTranslation();
   const [tab, setTab] = useState<EffectsTab>('background');
-  const settings = useVideoEffectsStore((state) => state.settings);
-  const activeTabs = selectActiveTabs(settings);
+  const draft = useVideoEffectsStore((state) => state.draft);
+  const activeTabs = selectActiveTabs(draft);
 
   return (
     <div className="effects__settings">

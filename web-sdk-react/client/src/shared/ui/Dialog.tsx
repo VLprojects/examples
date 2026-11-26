@@ -8,11 +8,12 @@ interface DialogProps {
   closeLabel: string;
   isOpen: boolean;
   actions?: ReactNode;
+  footer?: ReactNode;
   children: ReactNode;
   onClose: () => void;
 }
 
-export function Dialog({ title, closeLabel, isOpen, actions, children, onClose }: DialogProps) {
+export function Dialog({ title, closeLabel, isOpen, actions, footer, children, onClose }: DialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -50,6 +51,7 @@ export function Dialog({ title, closeLabel, isOpen, actions, children, onClose }
             </IconButton>
           </header>
           {children}
+          {footer && <footer className="dialog__footer">{footer}</footer>}
         </div>
       )}
     </dialog>

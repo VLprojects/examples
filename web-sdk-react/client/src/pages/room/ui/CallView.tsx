@@ -42,7 +42,7 @@ export function CallView() {
       <ControlBar
         areParticipantsOpen={areParticipantsOpen}
         onToggleParticipants={() => setAreParticipantsOpen(!areParticipantsOpen)}
-        extraControls={<EffectsButton cameraTrack={tracks.camera} displayName={typeof displayName === 'string' ? displayName : undefined} />}
+        extraControls={<EffectsButton cameraTrack={tracks.camera} isPublishing displayName={typeof displayName === 'string' ? displayName : undefined} />}
       />
     </div>
   );

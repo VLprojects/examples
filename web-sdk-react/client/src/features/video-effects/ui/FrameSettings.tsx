@@ -8,7 +8,7 @@ interface FrameSettingsProps {
 
 export function FrameSettings({ displayName }: FrameSettingsProps) {
   const { t } = useTranslation();
-  const settings = useVideoEffectsStore((state) => state.settings);
+  const settings = useVideoEffectsStore((state) => state.draft);
   const update = useVideoEffectsStore((state) => state.update);
 
   const toggleLowerThird = (isLowerThirdOn: boolean) => update({

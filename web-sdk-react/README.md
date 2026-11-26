@@ -38,6 +38,7 @@ The Personal Token is a management key: it must stay on the server and never rea
 | Camera, microphone, screen sharing, device switch | `client/src/features/local-media` |
 | Raised hand through `appData` | `client/src/features/raise-hand` |
 | Video effects: blur, virtual background, position in the frame, picture enhancements, LUT color filters, auto framing, lower third | `client/src/features/video-effects` |
+| Effects try-on on a separate preview track (`isPreview`): the published track changes only on Apply | `client/src/features/video-effects/model/usePreviewTrack.ts` |
 | Noise suppression: Audio Effects SDK with a fallback to RNNoise | `client/src/features/noise-suppression` |
 | Creating a room and joining it | `client/src/features/join-room` |
 | Join and leave notifications | `client/src/features/room-notifications` |
@@ -92,6 +93,7 @@ Personal Token — управляющий ключ: он живёт только
 | Камера, микрофон, демонстрация экрана, смена устройства | `client/src/features/local-media` |
 | Поднятая рука через `appData` | `client/src/features/raise-hand` |
 | Видеоэффекты: размытие и замена фона, положение в кадре, улучшения картинки, цветовые LUT-фильтры, автокадрирование, плашка с именем | `client/src/features/video-effects` |
+| Примерка эффектов на отдельном треке предпросмотра (`isPreview`): опубликованный трек меняется только по «Применить» | `client/src/features/video-effects/model/usePreviewTrack.ts` |
 | Шумоподавление: Audio Effects SDK с откатом на RNNoise | `client/src/features/noise-suppression` |
 | Создание комнаты и вход | `client/src/features/join-room` |
 | Уведомления о входе и выходе участников | `client/src/features/room-notifications` |

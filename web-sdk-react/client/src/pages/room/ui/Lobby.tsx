@@ -31,7 +31,7 @@ export function Lobby({ alias }: LobbyProps) {
     <div className="lobby">
       <h1>{t(alias ? 'join.headingJoin' : 'join.headingStart')}</h1>
       <MediaPreview
-        extraControls={<EffectsButton cameraTrack={previewCamera} />}
+        extraControls={<EffectsButton cameraTrack={previewCamera} isPublishing={false} />}
         microphoneMenuExtra={<NoiseSuppressionToggle isPublishing={false} />}
       />
       <JoinRoomForm
