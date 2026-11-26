@@ -7,7 +7,7 @@ const ENHANCEMENTS = ['beautification', 'lowLight', 'colorCorrection', 'sharpnes
 
 export function PictureSettings() {
   const { t } = useTranslation();
-  const settings = useVideoEffectsStore((state) => state.settings);
+  const settings = useVideoEffectsStore((state) => state.draft);
   const update = useVideoEffectsStore((state) => state.update);
 
   return (

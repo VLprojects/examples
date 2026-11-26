@@ -63,9 +63,12 @@ interface VideoEffectsState {
   attempt: number;
   uploadedImageUrl: string | undefined;
   settings: VideoEffectsSettings;
+  draft: VideoEffectsSettings;
   update: (patch: Partial<VideoEffectsSettings>) => void;
   uploadImage: (file: File) => void;
   reset: () => void;
+  apply: () => void;
+  discard: () => void;
   retry: () => void;
 }
 
@@ -74,20 +77,25 @@ export const useVideoEffectsStore = create<VideoEffectsState>((set) => ({
   attempt: 0,
   uploadedImageUrl: undefined,
   settings: DEFAULT_SETTINGS,
+  draft: DEFAULT_SETTINGS,
 
-  update: (patch) => set(({ settings }) => ({ settings: { ...settings, ...patch } })),
+  update: (patch) => set(({ draft }) => ({ draft: { ...draft, ...patch } })),
 
-  uploadImage: (file) => set(({ settings, uploadedImageUrl }) => {
+  uploadImage: (file) => set(({ draft, uploadedImageUrl }) => {
     if (uploadedImageUrl) {
       URL.revokeObjectURL(uploadedImageUrl);
     }
 
     const imageUrl = URL.createObjectURL(file);
 
-    return { uploadedImageUrl: imageUrl, settings: { ...settings, background: 'image', imageUrl } };
+    return { uploadedImageUrl: imageUrl, draft: { ...draft, background: 'image', imageUrl } };
   }),
 
-  reset: () => set({ settings: DEFAULT_SETTINGS }),
+  reset: () => set({ draft: DEFAULT_SETTINGS }),
+
+  apply: () => set(({ draft }) => ({ settings: draft })),
+
+  discard: () => set(({ settings }) => ({ draft: settings })),
 
   retry: () => set(({ attempt }) => ({ attempt: attempt + 1 })),
 }));
@@ -149,11 +157,11 @@ export const selectActiveTabs = (settings: VideoEffectsSettings): Record<Effects
 
 const SETTLE_MS = 150;
 
-let pending: Effects | undefined;
+const pending = new Map<VideoTrack, Effects>();
 let queue = Promise.resolve();
 
 const applyPending = async (track: VideoTrack) => {
-  if (!pending) {
+  if (!pending.has(track)) {
     return;
   }
 
@@ -161,9 +169,9 @@ const applyPending = async (track: VideoTrack) => {
     setTimeout(resolve, SETTLE_MS);
   });
 
-  const effects = pending;
+  const effects = pending.get(track) ?? {};
 
-  pending = undefined;
+  pending.delete(track);
 
   if (Object.keys(effects).length === 0) {
     await track.disableEffects();
@@ -181,7 +189,7 @@ const applyPending = async (track: VideoTrack) => {
 };
 
 export const applyVideoEffects = (track: VideoTrack, effects: Effects) => {
-  pending = effects;
+  pending.set(track, effects);
   queue = queue
     .then(() => applyPending(track))
     .catch(() => useVideoEffectsStore.setState({ status: 'failed' }));

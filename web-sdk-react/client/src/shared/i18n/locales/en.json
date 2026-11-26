@@ -68,7 +68,10 @@
     "off": "Off",
     "retry": "Retry",
     "cameraOff": "Turn the camera on to see the effects. Your settings are kept.",
-    "previewCaption": "This is how others see you",
+    "apply": "Apply",
+    "cancel": "Cancel",
+    "previewStarting": "Starting the preview…",
+    "previewCaption": "Try-on — only you see this",
     "loading": "Loading effect models…",
     "failed": "Could not apply the effects.",
     "tabs": {

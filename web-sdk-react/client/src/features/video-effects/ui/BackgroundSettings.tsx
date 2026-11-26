@@ -7,7 +7,7 @@ const imageUrlOf = (name: string) => `/backgrounds/${name}.jpg`;
 
 export function BackgroundSettings() {
   const { t } = useTranslation();
-  const { background, blur, color, imageUrl, layout } = useVideoEffectsStore((state) => state.settings);
+  const { background, blur, color, imageUrl, layout } = useVideoEffectsStore((state) => state.draft);
   const uploadedImageUrl = useVideoEffectsStore((state) => state.uploadedImageUrl);
   const update = useVideoEffectsStore((state) => state.update);
   const uploadImage = useVideoEffectsStore((state) => state.uploadImage);
