@@ -4,6 +4,7 @@ import { useDeviceStore } from '@/entities/device';
 import { PeerTile, ScreenTile } from '@/entities/peer';
 import { useSessionStore } from '@/entities/session';
 import { CopyLinkButton } from '@/features/copy-invite-link';
+import { PeerNetworkBadge } from '@/features/network-quality';
 import { PinToggle, usePinStore } from '@/features/pin-peer';
 
 export function Stage() {
@@ -30,6 +31,7 @@ export function Stage() {
             isActiveSpeaker={peer.id === activeSpeakerId}
             isMain={peer === pinnedPeer}
             audioOutputDeviceId={speakerDeviceId}
+            status={<PeerNetworkBadge peer={peer} />}
             actions={!presenter && peers.length > 1 && <PinToggle peerId={peer.id} />}
           />
         ))}

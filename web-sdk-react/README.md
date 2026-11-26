@@ -40,6 +40,7 @@ The Personal Token is a management key: it must stay on the server and never rea
 | Video effects: blur, virtual background, position in the frame, picture enhancements, LUT color filters, auto framing, lower third | `client/src/features/video-effects` |
 | Effects try-on on a separate preview track (`isPreview`): the published track changes only on Apply | `client/src/features/video-effects/model/usePreviewTrack.ts` |
 | Noise suppression: Audio Effects SDK with a fallback to RNNoise | `client/src/features/noise-suppression` |
+| Network quality: own uplink, downlink and device (`client.networkQuality()`, `network-quality-updated`), shared with other peers through `appData` | `client/src/features/network-quality` |
 | Creating a room and joining it | `client/src/features/join-room` |
 | Join and leave notifications | `client/src/features/room-notifications` |
 | Call layout: grid, pinned participant, screen share | `client/src/widgets/stage` |
@@ -95,6 +96,7 @@ Personal Token — управляющий ключ: он живёт только
 | Видеоэффекты: размытие и замена фона, положение в кадре, улучшения картинки, цветовые LUT-фильтры, автокадрирование, плашка с именем | `client/src/features/video-effects` |
 | Примерка эффектов на отдельном треке предпросмотра (`isPreview`): опубликованный трек меняется только по «Применить» | `client/src/features/video-effects/model/usePreviewTrack.ts` |
 | Шумоподавление: Audio Effects SDK с откатом на RNNoise | `client/src/features/noise-suppression` |
+| Качество сети: своя отправка, приём и устройство (`client.networkQuality()`, `network-quality-updated`), передача остальным участникам через `appData` | `client/src/features/network-quality` |
 | Создание комнаты и вход | `client/src/features/join-room` |
 | Уведомления о входе и выходе участников | `client/src/features/room-notifications` |
 | Сцена звонка: сетка, закреплённый участник, демонстрация | `client/src/widgets/stage` |

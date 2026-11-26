@@ -151,5 +151,30 @@
     },
     "fallback": "The main noise suppression engine is unavailable, switched to RNNoise.",
     "failed": "Could not turn on noise suppression."
+  },
+  "networkQuality": {
+    "title": "Network quality",
+    "directions": {
+      "uplink": "Sending",
+      "downlink": "Receiving",
+      "device": "Device"
+    },
+    "levels": {
+      "unknown": "no data",
+      "good": "good",
+      "fair": "fair",
+      "poor": "poor",
+      "bad": "bad"
+    },
+    "reasons": {
+      "packet-loss": "packet loss",
+      "high-rtt": "high latency",
+      "jitter": "jitter",
+      "bandwidth-limited": "not enough bandwidth",
+      "cpu-limited": "the device is overloaded",
+      "relay-path": "connection goes through TURN"
+    },
+    "causedBySenders": "This looks like the other participants' network: their sending is poor.",
+    "hint": "Rated by packet loss, latency and jitter — separately for sending, receiving and the device."
   }
 }
