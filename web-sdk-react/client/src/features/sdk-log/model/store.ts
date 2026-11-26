@@ -14,7 +14,7 @@ export interface SdkLogEntry {
   searchText: string;
 }
 
-const MAX_ENTRIES = 1000;
+const MAX_ENTRIES = 5000;
 const FLUSH_MS = 250;
 
 interface SdkLogState {

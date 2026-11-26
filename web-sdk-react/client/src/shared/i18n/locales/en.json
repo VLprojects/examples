@@ -291,7 +291,7 @@
         "transports": "both transports: ICE, candidates, RTT, bitrate",
         "peers": "track statistics and layers of every peer",
         "events": "the last 100 SDK events",
-        "logs": "SDK logs: up to the last 1000 records of every level"
+        "logs": "SDK logs: up to the last 5000 records of every level"
       },
       "logsSummary": "SDK log records right now: {{total}}, including {{errors}} errors and {{warnings}} warnings.",
       "copy": "Copy diagnostics",

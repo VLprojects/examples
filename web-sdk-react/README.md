@@ -42,7 +42,7 @@ The Personal Token is a management key: it must stay on the server and never rea
 | Noise suppression: Audio Effects SDK with a fallback to RNNoise | `client/src/features/noise-suppression` |
 | Network quality: own uplink, downlink and device (`client.networkQuality()`, `network-quality-updated`), shared with other peers through `appData` | `client/src/features/network-quality` |
 | Developer mode (`</>`): SDK event log, transport stats, ICE policy and restart | `client/src/features/event-log`, `client/src/features/connection-stats` |
-| SDK logs in the app: `onLogMessage` with `logLevel: 7`, a buffer of the last 1000 records, level filter and search | `client/src/features/sdk-log` |
+| SDK logs in the app: `onLogMessage` with `logLevel: 7`, a buffer of the last 5000 records, level filter and search | `client/src/features/sdk-log` |
 | Per-track debug overlay on tiles: bitrate, fps, loss, jitter, codec, stream scores, simulcast layers, key frame request, pausing a consumer | `client/src/features/track-debug` |
 | Diagnostics report: one JSON with session meta, network quality, transports, tracks and recent events | `client/src/widgets/dev-panel` |
 | Creating a room and joining it | `client/src/features/join-room` |
@@ -102,7 +102,7 @@ Personal Token — управляющий ключ: он живёт только
 | Шумоподавление: Audio Effects SDK с откатом на RNNoise | `client/src/features/noise-suppression` |
 | Качество сети: своя отправка, приём и устройство (`client.networkQuality()`, `network-quality-updated`), передача остальным участникам через `appData` | `client/src/features/network-quality` |
 | Режим разработчика (`</>`): журнал событий SDK, статистика транспортов, ICE-политика и перезапуск ICE | `client/src/features/event-log`, `client/src/features/connection-stats` |
-| Логи SDK в приложении: `onLogMessage` с `logLevel: 7`, буфер на 1000 последних записей, фильтр по уровню и поиск | `client/src/features/sdk-log` |
+| Логи SDK в приложении: `onLogMessage` с `logLevel: 7`, буфер на 5000 последних записей, фильтр по уровню и поиск | `client/src/features/sdk-log` |
 | Отладочный оверлей на плитках: битрейт, fps, потери, джиттер, кодек, оценки потока, слои simulcast, запрос ключевого кадра, пауза приёма | `client/src/features/track-debug` |
 | Диагностический отчёт: один JSON с данными сессии, качеством сети, транспортами, треками и последними событиями | `client/src/widgets/dev-panel` |
 | Создание комнаты и вход | `client/src/features/join-room` |
