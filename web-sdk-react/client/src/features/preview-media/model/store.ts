@@ -1,6 +1,6 @@
 import type { Track } from '@livedigital/client';
 import { create } from 'zustand';
-import { useDeviceStore } from '@/entities/device';
+import { selectTrackConstraints, useDeviceStore } from '@/entities/device';
 import { getSdkClient } from '@/shared/sdk';
 
 export type PreviewKind = 'camera' | 'microphone';
@@ -27,8 +27,7 @@ const enqueue = (operation: () => Promise<void>): Promise<void> => {
 
 const createPreviewTrack = (kind: PreviewKind): Promise<Track> => {
   const client = getSdkClient();
-  const deviceId = useDeviceStore.getState().selected[kind];
-  const constraints = deviceId ? { deviceId: { exact: deviceId } } : true;
+  const constraints = selectTrackConstraints(kind);
 
   return kind === 'camera'
     ? client.createCameraVideoTrack({ video: constraints, isPreview: true })

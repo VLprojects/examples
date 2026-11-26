@@ -417,14 +417,26 @@ h1 {
   align-items: center;
   justify-content: center;
   align-self: center;
-  aspect-ratio: 16 / 9;
   margin: 16px;
   overflow: hidden;
   border-radius: var(--radius);
   background: var(--bg);
 }
 
+.effects__preview .video {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: min(448px, 100dvh - 192px);
+  aspect-ratio: auto 16 / 9;
+}
+
 .effects__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   margin: 0;
   padding: 24px;
   color: var(--text-muted);
@@ -554,6 +566,7 @@ h1 {
 }
 
 .option-tile {
+  position: relative;
   display: flex;
   flex: none;
   flex-direction: column;
