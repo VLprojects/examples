@@ -1,6 +1,6 @@
 import type { Client, Track } from '@livedigital/client';
 import { create } from 'zustand';
-import { useDeviceStore } from '@/entities/device';
+import { selectTrackConstraints } from '@/entities/device';
 import { useSessionStore } from '@/entities/session';
 import { getSdkClient } from '@/shared/sdk';
 import { showToast } from '@/shared/ui';
@@ -28,8 +28,7 @@ const INITIAL_STATE = {
 
 const createTrack = (kind: LocalMediaKind): Promise<Track> => {
   const client = getSdkClient();
-  const deviceId = useDeviceStore.getState().selected[kind];
-  const constraints = deviceId ? { deviceId: { exact: deviceId } } : true;
+  const constraints = selectTrackConstraints(kind);
 
   return kind === 'camera'
     ? client.createCameraVideoTrack({ video: constraints, stopTrackOnPause: true })

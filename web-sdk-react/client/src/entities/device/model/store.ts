@@ -48,3 +48,14 @@ export const bindDeviceEvents = (client: Client) => {
     useDeviceStore.setState(({ selected }) => ({ devices, selected: keepAvailable(devices, selected) }));
   });
 };
+
+const CAMERA_RESOLUTION: MediaTrackConstraints = { width: { ideal: 1280 }, height: { ideal: 720 } };
+
+export const selectTrackConstraints = (kind: 'camera' | 'microphone'): MediaTrackConstraints => {
+  const deviceId = useDeviceStore.getState().selected[kind];
+
+  return {
+    ...(kind === 'camera' && CAMERA_RESOLUTION),
+    ...(deviceId && { deviceId: { exact: deviceId } }),
+  };
+};
