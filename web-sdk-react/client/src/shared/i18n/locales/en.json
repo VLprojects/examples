@@ -181,7 +181,8 @@
     "title": "Developer",
     "tabs": {
       "events": "Events",
-      "connection": "Connection"
+      "connection": "Connection",
+      "report": "Report"
     },
     "events": {
       "filter": "Filter by event name",
@@ -214,6 +215,75 @@
       "datacenter": "Data center",
       "node": "Node",
       "relayEnforced": "The SDK switched to TURN on its own: a direct connection could not be established."
+    },
+    "track": {
+      "title": "Track debug",
+      "open": "Show track statistics",
+      "close": "Collapse",
+      "copy": "Copy the snapshot as JSON",
+      "noMedia": "no media",
+      "noVideo": "No video is published.",
+      "noAudio": "No audio is published.",
+      "actionFailed": "The operation failed.",
+      "direction": {
+        "inbound": "Inbound stream",
+        "outbound": "Outbound stream"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "video": "Video",
+        "audio": "Audio",
+        "layers": "Layers",
+        "peer": "Peer"
+      },
+      "videoBitrate": "Video",
+      "audioBitrate": "Audio",
+      "videoLoss": "Video loss",
+      "audioLoss": "Audio loss",
+      "codec": "Codec",
+      "decoder": "Decoder",
+      "encoder": "Encoder",
+      "resolution": "Resolution",
+      "bitrate": "Bitrate",
+      "targetBitrate": "Target bitrate",
+      "loss": "Loss per interval",
+      "jitter": "Jitter",
+      "packets": "Packets: received / lost",
+      "packetsSent": "Packets: sent / retransmitted",
+      "freezes": "Freezes",
+      "framesDropped": "Frames dropped",
+      "qualityLimitation": "Quality limitation",
+      "level": "Level",
+      "concealed": "Concealed samples",
+      "keyFrame": "Request a key frame",
+      "pause": "Pause receiving",
+      "resume": "Resume receiving",
+      "spatial": "Spatial",
+      "temporal": "Temporal",
+      "currentLayer": "Current layer",
+      "requestedLayer": "Requested layer",
+      "layerCount": "Layers: S / T",
+      "maxLayer": "Max layer",
+      "preferredCodec": "Preferred codec",
+      "name": "Name",
+      "moderator": "Moderator",
+      "paused": "paused",
+      "active": "active"
+    },
+    "copied": "Copied",
+    "yes": "yes",
+    "no": "no",
+    "report": {
+      "hint": "One JSON with everything needed to investigate a problem: attach it to a support request.",
+      "sections": {
+        "session": "SDK version, browser, data center, channel and peer ids",
+        "network": "network quality for the three directions",
+        "transports": "both transports: ICE, candidates, RTT, bitrate",
+        "peers": "track statistics and layers of every peer",
+        "events": "the last 100 SDK events"
+      },
+      "copy": "Copy diagnostics",
+      "download": "Download JSON"
     }
   }
 }

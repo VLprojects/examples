@@ -14,11 +14,12 @@ export type SidePanel = 'participants' | 'dev';
 
 interface ControlBarProps {
   sidePanel: SidePanel | undefined;
+  isDevMode: boolean;
   onToggleSidePanel: (panel: SidePanel) => void;
   extraControls?: ReactNode;
 }
 
-export function ControlBar({ sidePanel, onToggleSidePanel, extraControls }: ControlBarProps) {
+export function ControlBar({ sidePanel, isDevMode, onToggleSidePanel, extraControls }: ControlBarProps) {
   const { t } = useTranslation();
   const { alias } = useParams();
   const peerCount = useSessionStore((state) => state.peers.length);
@@ -49,7 +50,7 @@ export function ControlBar({ sidePanel, onToggleSidePanel, extraControls }: Cont
       </div>
       <div className="control-bar__panels">
         <IconButton
-          tone={sidePanel === 'dev' ? 'accent' : 'neutral'}
+          tone={isDevMode ? 'accent' : 'neutral'}
           label={t('dev.title')}
           aria-expanded={sidePanel === 'dev'}
           onClick={() => onToggleSidePanel('dev')}

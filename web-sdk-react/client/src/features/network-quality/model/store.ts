@@ -9,11 +9,20 @@ interface NetworkQualityState {
 
 export const useNetworkQualityStore = create<NetworkQualityState>(() => ({ quality: createUnknownQuality() }));
 
+const toShared = (quality: NetworkQuality) => Object.fromEntries(
+  Object.entries(quality).map(([direction, { level, reasons }]) => [direction, { level, reasons }]),
+);
+
+let lastPublished = '';
+
 const publish = (quality: NetworkQuality) => {
   const { status, updateAppData } = useSessionStore.getState();
+  const shared = toShared(quality);
+  const signature = JSON.stringify(shared);
 
-  if (status === 'connected') {
-    updateAppData({ networkQuality: quality }).catch(() => undefined);
+  if (status === 'connected' && signature !== lastPublished) {
+    lastPublished = signature;
+    updateAppData({ networkQuality: shared }).catch(() => undefined);
   }
 };
 
@@ -29,5 +38,6 @@ export const bindNetworkQualityEvents = (client: Client) => {
     }
 
     useNetworkQualityStore.setState({ quality: status === 'connected' ? client.networkQuality() : createUnknownQuality() });
+    lastPublished = '';
   });
 };

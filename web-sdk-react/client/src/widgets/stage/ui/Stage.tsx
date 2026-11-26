@@ -4,16 +4,29 @@ import { useDeviceStore } from '@/entities/device';
 import { PeerTile, ScreenTile } from '@/entities/peer';
 import { useSessionStore } from '@/entities/session';
 import { CopyLinkButton } from '@/features/copy-invite-link';
+import { useLocalMediaStore } from '@/features/local-media';
 import { PeerNetworkBadge } from '@/features/network-quality';
 import { PinToggle, usePinStore } from '@/features/pin-peer';
+import { TrackDebug } from '@/features/track-debug';
 
-export function Stage() {
+interface StageProps {
+  isDevMode: boolean;
+}
+
+export function Stage({ isDevMode }: StageProps) {
   const { t } = useTranslation();
   const peers = useSessionStore((state) => state.peers);
   const activeSpeakerId = useSessionStore((state) => state.activeSpeakerId);
   const presenterId = useSessionStore((state) => state.presenterId);
   const speakerDeviceId = useDeviceStore((state) => state.selected.speaker);
   const pinnedPeerId = usePinStore((state) => state.pinnedPeerId);
+  const localTracks = useLocalMediaStore((state) => state.tracks);
+  const localScreenTracks = useLocalMediaStore((state) => state.screenTracks);
+  const localCamera = { video: localTracks.camera, audio: localTracks.microphone };
+  const localScreen = {
+    video: localScreenTracks.find((track) => track.kind === 'video'),
+    audio: localScreenTracks.find((track) => track.kind === 'audio'),
+  };
 
   const presenter = peers.find(({ id }) => id === presenterId);
   const pinnedPeer = presenter ? undefined : peers.find(({ id }) => id === pinnedPeerId);
@@ -22,7 +35,12 @@ export function Stage() {
 
   return (
     <div className={hasMainTile ? 'stage stage--focus' : 'stage'}>
-      {presenter && <ScreenTile peer={presenter} />}
+      {presenter && (
+        <ScreenTile
+          peer={presenter}
+          debug={isDevMode && <TrackDebug peer={presenter} source="screen" localTracks={presenter.isMe ? localScreen : undefined} />}
+        />
+      )}
       <div className="stage__tiles" style={gridSize as CSSProperties}>
         {peers.map((peer) => (
           <PeerTile
@@ -32,6 +50,7 @@ export function Stage() {
             isMain={peer === pinnedPeer}
             audioOutputDeviceId={speakerDeviceId}
             status={<PeerNetworkBadge peer={peer} />}
+            debug={isDevMode && <TrackDebug peer={peer} localTracks={peer.isMe ? localCamera : undefined} />}
             actions={!presenter && peers.length > 1 && <PinToggle peerId={peer.id} />}
           />
         ))}

@@ -6,8 +6,8 @@ import { getSdkClient } from '@/shared/sdk';
 import { Button, Segmented, showToast } from '@/shared/ui';
 import {
   formatKbps, formatMs, formatScore, iceStateTone, rttTone,
-} from '../model/format';
-import type { Tone } from '../model/format';
+} from '@/shared/lib';
+import type { Tone } from '@/shared/lib';
 import { useIcePolicyStore } from '../model/store';
 import { useConnectionStats } from '../model/useConnectionStats';
 
