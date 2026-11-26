@@ -1505,6 +1505,260 @@ h1 {
   color: var(--text-muted);
 }
 
+.dev-panel__body--logs {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sdk-log {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.sdk-log__levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sdk-log__chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sdk-log__chip::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--level-color);
+  content: '';
+}
+
+.sdk-log__chip span {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sdk-log__chip[aria-pressed='false'] {
+  background: transparent;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.sdk-log__chip[aria-pressed='false']::before {
+  background: var(--border);
+}
+
+.sdk-log__chip:focus-visible,
+.sdk-log__summary:focus-visible,
+.sdk-log__latest:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.sdk-log__chip--error,
+.sdk-log__row--error {
+  --level-color: var(--danger);
+}
+
+.sdk-log__chip--warn,
+.sdk-log__row--warn {
+  --level-color: var(--warning);
+}
+
+.sdk-log__chip--info,
+.sdk-log__row--info {
+  --level-color: var(--accent-hover);
+}
+
+.sdk-log__chip--debug,
+.sdk-log__row--debug {
+  --level-color: var(--text-muted);
+}
+
+.sdk-log__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.sdk-log__list {
+  position: relative;
+}
+
+.sdk-log__row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-top: 1px solid var(--border);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.sdk-log__summary {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 2px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sdk-log__summary time {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.sdk-log__level {
+  flex: none;
+  width: 5ch;
+  color: var(--level-color);
+}
+
+.sdk-log__message {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sdk-log__summary[aria-expanded='true'] .sdk-log__message {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.sdk-log__details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.sdk-log__details .button {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.sdk-log__latest {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.json-tree {
+  align-self: stretch;
+  margin: 0 0 8px;
+  padding: 8px;
+  overflow-x: auto;
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.sdk-log__details .json-tree {
+  margin: 0;
+}
+
+.json-tree__children {
+  margin: 0;
+  padding: 0;
+}
+
+.json-tree__child {
+  margin: 0;
+  padding: 0 0 0 16px;
+}
+
+.json-tree > .json-tree__child {
+  padding-left: 0;
+}
+
+.json-tree__label {
+  margin-right: 6px;
+  color: var(--text);
+}
+
+.json-tree__label--clickable {
+  cursor: pointer;
+}
+
+.json-tree__value--string {
+  color: var(--success);
+}
+
+.json-tree__value--number,
+.json-tree__value--boolean {
+  color: var(--accent-hover);
+}
+
+.json-tree__value--empty {
+  font-style: italic;
+}
+
+.json-tree__toggle {
+  margin-right: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.json-tree__toggle::after {
+  content: '▾';
+}
+
+.json-tree__toggle--collapsed::after {
+  content: '▸';
+}
+
+.json-tree__toggle:focus-visible {
+  outline: 2px solid var(--accent);
+}
+
+.json-tree__collapsed {
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.json-tree__collapsed::after {
+  content: '…';
+}
+
 .stats section {
   display: flex;
   flex-direction: column;

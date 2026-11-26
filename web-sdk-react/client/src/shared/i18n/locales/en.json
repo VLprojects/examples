@@ -181,6 +181,7 @@
     "title": "Developer",
     "tabs": {
       "events": "Events",
+      "logs": "Logs",
       "connection": "Connection",
       "report": "Report"
     },
@@ -190,6 +191,15 @@
       "showFrequent": "Show frequent events",
       "empty": "No events yet.",
       "noPayload": "no payload"
+    },
+    "logs": {
+      "filter": "Search in text and data",
+      "clear": "Clear",
+      "levels": "Levels",
+      "empty": "No log records yet.",
+      "nothingFound": "Nothing matches the filter.",
+      "copy": "Copy record",
+      "toLatest": "Jump to latest"
     },
     "connection": {
       "outbound": "Sending",
@@ -280,10 +290,17 @@
         "network": "network quality for the three directions",
         "transports": "both transports: ICE, candidates, RTT, bitrate",
         "peers": "track statistics and layers of every peer",
-        "events": "the last 100 SDK events"
+        "events": "the last 100 SDK events",
+        "logs": "SDK logs: up to the last 1000 records of every level"
       },
+      "logsSummary": "SDK log records right now: {{total}}, including {{errors}} errors and {{warnings}} warnings.",
       "copy": "Copy diagnostics",
       "download": "Download JSON"
     }
+  },
+  "jsonTree": {
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "empty": "no data"
   }
 }

@@ -3,6 +3,7 @@ import { useSessionStore } from '@/entities/session';
 import { useEventLogStore } from '@/features/event-log';
 import { useLocalMediaStore } from '@/features/local-media';
 import { useNetworkQualityStore } from '@/features/network-quality';
+import { toReportEntry, useSdkLogStore } from '@/features/sdk-log';
 import { readPeerDebugSnapshot } from '@/features/track-debug';
 import { getSdkClient } from '@/shared/sdk';
 
@@ -28,6 +29,7 @@ export const buildDiagnosticsReport = async () => {
       peers.map((peer) => readPeerDebugSnapshot(peer, CAMERA_LABELS, peer.isMe ? localTracks : undefined)),
     ),
     events: useEventLogStore.getState().entries.slice(0, REPORTED_EVENTS),
+    logs: useSdkLogStore.getState().entries.map(toReportEntry),
   };
 };
 

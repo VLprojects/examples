@@ -1,5 +1,4 @@
 const MAX_DEPTH = 4;
-const MAX_LENGTH = 4000;
 
 const simplify = (value: unknown, depth: number): unknown => {
   if (value instanceof Error) {
@@ -31,12 +30,6 @@ const simplify = (value: unknown, depth: number): unknown => {
   );
 };
 
-export const serializePayload = (args: unknown[]): string => {
-  if (args.length === 0) {
-    return '';
-  }
-
-  const text = JSON.stringify(simplify(args.length === 1 ? args[0] : args, 0), null, 2) ?? '';
-
-  return text.length > MAX_LENGTH ? `${text.slice(0, MAX_LENGTH)}…` : text;
-};
+export const simplifyPayload = (args: unknown[]): unknown => (
+  args.length === 0 ? undefined : simplify(args.length === 1 ? args[0] : args, 0)
+);
