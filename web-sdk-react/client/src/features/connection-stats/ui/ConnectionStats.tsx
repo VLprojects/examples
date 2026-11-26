@@ -2,32 +2,32 @@ import { version as sdkVersion } from '@livedigital/client/package.json';
 import type { IceTransportPolicy, TransportsWebRTCStats } from '@livedigital/client';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { docsUrl } from '@/shared/config';
 import { getSdkClient } from '@/shared/sdk';
-import { Button, Segmented, showToast } from '@/shared/ui';
+import {
+  Button, Segmented, StatRow, showToast,
+} from '@/shared/ui';
 import {
   formatKbps, formatMs, formatScore, iceStateTone, rttTone,
 } from '@/shared/lib';
-import type { Tone } from '@/shared/lib';
 import { useIcePolicyStore } from '../model/store';
 import { useConnectionStats } from '../model/useConnectionStats';
 
 const DIRECTIONS = ['outbound', 'inbound'] as const;
 const POLICIES: IceTransportPolicy[] = ['all', 'relay'];
 
-interface RowProps {
-  label: string;
-  value: string | undefined;
-  tone?: Tone;
-}
+const STATS_DOCS_URL = docsUrl('network-quality', 'низкоуровневая-статистика');
+const TRANSPORT_FIELDS = {
+  iceState: 'state',
+  candidate: 'local.candidateType · remote.candidateType',
+  rtt: 'currentRoundTripTime',
+  bitrate: 'bitrate',
+  availableBitrate: 'availableOutgoingBitrate',
+  streamScores: 'Qa · Qv · Qav',
+};
+const META_FIELDS = ['channelId', 'peerId', 'clUId'] as const;
 
-function Row({ label, value, tone }: RowProps) {
-  return (
-    <div className="stats__row">
-      <dt>{label}</dt>
-      <dd className={tone && `stats__value--${tone}`}>{value && value !== 'undefined' ? value : '—'}</dd>
-    </div>
-  );
-}
+const clean = (value: string | undefined) => (value && value !== 'undefined' ? value : undefined);
 
 const formatCandidate = (candidate: NonNullable<TransportsWebRTCStats['inbound']>['local'] | undefined) => (
   candidate && `${candidate.candidateType} · ${candidate.protocol} · ${candidate.address ?? candidate.ip}:${candidate.port}`
@@ -56,30 +56,44 @@ export function ConnectionStats() {
     <div className="stats">
       {DIRECTIONS.map((direction) => {
         const stats = transports[direction];
+        const hint = (field: keyof typeof TRANSPORT_FIELDS) => ({
+          text: t(`dev.connection.hints.${field}`),
+          code: `client.transportsStats().${direction}.${TRANSPORT_FIELDS[field]}`,
+          docsUrl: STATS_DOCS_URL,
+        });
 
         return (
           <section key={direction}>
             <h3 className="settings-title">{t(`dev.connection.${direction}`)}</h3>
             {stats ? (
               <dl className="stats__list">
-                <Row label={t('dev.connection.iceState')} value={stats.state} tone={iceStateTone(stats.state)} />
-                <Row label={t('dev.connection.localCandidate')} value={formatCandidate(stats.local)} />
-                <Row label={t('dev.connection.remoteCandidate')} value={formatCandidate(stats.remote)} />
-                <Row label="RTT" value={formatMs(stats.currentRoundTripTime)} tone={rttTone(stats.currentRoundTripTime)} />
-                <Row label={t('dev.connection.bitrate')} value={formatKbps(stats.bitrate)} />
+                <StatRow label={t('dev.connection.iceState')} value={stats.state} tone={iceStateTone(stats.state)} hint={hint('iceState')} />
+                <StatRow label={t('dev.connection.localCandidate')} value={formatCandidate(stats.local)} hint={hint('candidate')} />
+                <StatRow label={t('dev.connection.remoteCandidate')} value={formatCandidate(stats.remote)} />
+                <StatRow
+                  label="RTT"
+                  value={formatMs(stats.currentRoundTripTime)}
+                  tone={rttTone(stats.currentRoundTripTime)}
+                  hint={hint('rtt')}
+                />
+                <StatRow label={t('dev.connection.bitrate')} value={formatKbps(stats.bitrate)} hint={hint('bitrate')} />
                 {direction === 'outbound' && (
-                  <Row label={t('dev.connection.availableBitrate')} value={formatKbps(stats.availableOutgoingBitrate)} />
+                  <StatRow
+                    label={t('dev.connection.availableBitrate')}
+                    value={formatKbps(stats.availableOutgoingBitrate)}
+                    hint={hint('availableBitrate')}
+                  />
                 )}
-                <Row
+                <StatRow
                   label={t('dev.connection.streamScores')}
                   value={`Qa ${formatScore(stats.Qa)} · Qv ${formatScore(stats.Qv)} · Qav ${formatScore(stats.Qav)}`}
+                  hint={hint('streamScores')}
                 />
               </dl>
             ) : <p className="hint">{t('dev.connection.noTransport')}</p>}
           </section>
         );
       })}
-      <p className="hint">{t('dev.connection.scoresHint')}</p>
       <section>
         <h3 className="settings-title">{t('dev.connection.ice')}</h3>
         <Segmented
@@ -96,12 +110,17 @@ export function ConnectionStats() {
       <section>
         <h3 className="settings-title">{t('dev.connection.session')}</h3>
         <dl className="stats__list">
-          <Row label={t('dev.connection.sdkVersion')} value={sdkVersion} />
-          <Row label={t('dev.connection.datacenter')} value={meta.datacenterName} />
-          <Row label={t('dev.connection.node')} value={meta.nodeId} />
-          <Row label="channelId" value={meta.channelId} />
-          <Row label="peerId" value={meta.peerId} />
-          <Row label="clUId" value={meta.clUId} />
+          <StatRow label={t('dev.connection.sdkVersion')} value={sdkVersion} />
+          <StatRow label={t('dev.connection.datacenter')} value={clean(meta.datacenterName)} />
+          <StatRow label={t('dev.connection.node')} value={clean(meta.nodeId)} />
+          {META_FIELDS.map((field) => (
+            <StatRow
+              key={field}
+              label={field}
+              value={clean(meta[field])}
+              hint={{ text: t(`dev.connection.hints.${field}`), code: `client.meta.${field}` }}
+            />
+          ))}
         </dl>
       </section>
     </div>

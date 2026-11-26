@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, JsonTree } from '@/shared/ui';
+import { ApiNote, Button, JsonTree } from '@/shared/ui';
+import { describeEvent } from '../model/catalog';
 import { FREQUENT_EVENTS, useEventLogStore } from '../model/store';
 
 const formatTime = (time: number) => new Date(time).toLocaleTimeString([], { hour12: false });
+
+function EventNote({ source, name }: { source: string; name: string }) {
+  const { t } = useTranslation();
+  const { descriptionKey, ...note } = describeEvent(source, name);
+
+  return <ApiNote text={t(`dev.events.descriptions.${descriptionKey}`)} {...note} />;
+}
 
 export function EventLog() {
   const { t } = useTranslation();
@@ -43,6 +51,7 @@ export function EventLog() {
                 <span className="event-log__name">{name}</span>
                 <span className="event-log__source">{source}</span>
               </summary>
+              <EventNote source={source} name={name} />
               {payload === undefined ? <pre>{t('dev.events.noPayload')}</pre> : <JsonTree data={payload} />}
             </details>
           </li>

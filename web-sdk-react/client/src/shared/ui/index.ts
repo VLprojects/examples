@@ -1,3 +1,4 @@
+export { ApiNote } from './ApiNote';
 export { AudioView } from './AudioView';
 export { Button } from './Button';
 export { Carousel } from './Carousel';
@@ -10,6 +11,7 @@ export { Popover } from './Popover';
 export { Segmented } from './Segmented';
 export { Slider } from './Slider';
 export { Sparkline } from './Sparkline';
+export { StatRow } from './StatRow';
 export { Tabs } from './Tabs';
 export { showToast } from './toast/store';
 export { Toaster } from './toast/Toaster';

@@ -1,1 +1,1 @@
-export { DOCS_URL, SOURCE_URL } from './links';
+export { DOCS_URL, docsUrl, SOURCE_URL } from './links';

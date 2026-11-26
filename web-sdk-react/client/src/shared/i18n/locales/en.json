@@ -185,12 +185,63 @@
       "connection": "Connection",
       "report": "Report"
     },
+    "guide": {
+      "title": "How to get this in your app",
+      "events": "Everything the SDK tells the app through events. Room-wide events arrive on client.observer, events of a specific peer on peer.observer. Expand a row to see the payload, how to subscribe and a link to the reference.",
+      "logs": "Internal SDK logs: what it does and what it receives from the server. To get them in your app, pass logLevel and the onLogMessage callback to the client. The demo keeps the last 5000 records and adds them to the report.",
+      "connection": "The client has two WebRTC transports: one to send and one to receive. client.transportsStats() returns their state, candidates and quality scores. Below you can change the route manually and restart ICE without rejoining the room.",
+      "report": "The report is built from the public SDK API only, so you can build the same one in your app and attach it to support requests."
+    },
     "events": {
       "filter": "Filter by event name",
       "clear": "Clear",
       "showFrequent": "Show frequent events",
       "empty": "No events yet.",
-      "noPayload": "no payload"
+      "noPayload": "no payload",
+      "descriptions": {
+        "session": "A record of the demo itself, not an SDK event: the app changes the session status based on client.join() and connection events.",
+        "channel-event": "Any channel event from the server in its raw form. Handy for debugging; app logic should use the dedicated typed events.",
+        "peer-joined": "A peer joined the room. The payload is a Peer: subscribe to its observer to get tracks and peer changes.",
+        "peer-left": "A peer left the room. The payload is its peerId.",
+        "channel-activity-confirmation-required": "The server asks to confirm the peer is still here. The app shows a prompt and calls client.confirmActivity().",
+        "channel-activity-confirmation-acquired": "Activity is confirmed, the peer stays in the room.",
+        "channel-activity-confirmation-expired": "The confirmation time ran out: the server will disconnect the peer.",
+        "channel-rejoin-required": "The room state diverged from the server too far and a rejoin is needed: call client.join() again.",
+        "channel-state-inconsistent": "The SDK noticed its state differs from the server and starts a sync.",
+        "channel-state-synced": "The room state is in sync with the server: peers and their media are up to date.",
+        "devices-list-updated": "The list of cameras, microphones or speakers changed: a device was plugged in or removed.",
+        "transport-connection-timeout": "A transport did not connect in time. The payload has the stage (ICE or DTLS) and the direction.",
+        "track-force-closed": "The server force-closed your track, for example a moderator turned off your microphone or camera.",
+        "track-failed": "Your local track stopped working: the device was removed or the browser stopped the capture.",
+        "active-speaker-changed": "The active speaker changed. The payload is the peer, or empty when everyone is silent.",
+        "connection-lost": "The connection to the signaling server is lost. The SDK tries to restore it on its own.",
+        "connection-restored": "The connection to the server is restored and the room is syncing again.",
+        "forced-disconnect": "The server disconnected the peer: a moderator removed them or they joined from another device.",
+        "reject-unauthorized": "The server rejected the connection: the token is invalid or expired.",
+        "denoiser-initializing": "Noise suppression is loading or has finished loading: the payload tells whether initialization is in progress.",
+        "denoiser-enabled": "Noise suppression is on. The payload tells which engine is running.",
+        "denoiser-disabled": "Noise suppression is off.",
+        "denoiser-fallback": "The main noise suppression engine failed to start and the SDK switched to the fallback one.",
+        "denoiser-failed": "Noise suppression could not be enabled. The payload has the cause.",
+        "effects-enabled": "Video effects are applied to the camera track.",
+        "effects-disabled": "Video effects are removed from the camera track.",
+        "effects-failed": "A video effects operation failed. The payload has the operation and the cause.",
+        "network-scores-updated": "Fresh stream quality scores (MOS) for the inbound and outbound directions. Fires on every stats poll.",
+        "network-quality-updated": "A new estimate of your own network: level and reasons for three directions — uplink, downlink, device.",
+        "media-published": "The peer published media. The track itself follows in track-start once the SDK subscribes to it.",
+        "media-unpublished": "The peer unpublished media.",
+        "publisher-paused": "The peer paused publishing, for example muted the microphone without closing the track.",
+        "publisher-resumed": "The peer resumed publishing.",
+        "connection-quality-changed": "The peer connection score calculated by the server changed.",
+        "track-start": "The peer track is ready to play: pass its mediaStreamTrack to a video or audio element.",
+        "track-end": "The peer track is closed, remove its playback element.",
+        "track-paused": "Receiving the track is paused: by the sender, by the server, or by you through track.pause().",
+        "track-resumed": "Receiving the track is resumed.",
+        "peer-track-failed": "The peer track could not be received: subscribing to it failed.",
+        "app-data-updated": "The peer changed its appData — arbitrary app data: name, raised hand, network quality.",
+        "produce-permissions-changed": "The set of media the peer is allowed to publish changed.",
+        "groups-changed": "The peer groups changed — they define whom the peer sees and hears."
+      }
     },
     "logs": {
       "filter": "Search in text and data",
@@ -211,7 +262,6 @@
       "availableBitrate": "Available bitrate",
       "streamScores": "Stream quality",
       "noTransport": "The transport is not created yet.",
-      "scoresHint": "Qa, Qv and Qav rate the quality of the streams (MOS, 1 to 5). They depend on the sender and the server as well; the network quality indicator shows the state of your own network.",
       "ice": "ICE",
       "icePolicy": "Route",
       "policies": {
@@ -224,7 +274,18 @@
       "sdkVersion": "SDK version",
       "datacenter": "Data center",
       "node": "Node",
-      "relayEnforced": "The SDK switched to TURN on its own: a direct connection could not be established."
+      "relayEnforced": "The SDK switched to TURN on its own: a direct connection could not be established.",
+      "hints": {
+        "iceState": "The ICE connection state of the transport. connected and completed are healthy; disconnected and failed mean media is not flowing.",
+        "candidate": "The selected candidate pair type shows the route: host — direct, srflx — through NAT, prflx — an address discovered during checks, relay — through a TURN server.",
+        "rtt": "Round-trip time to the server. Up to 150 ms the delay is unnoticeable, above 300 ms a conversation gets uncomfortable.",
+        "bitrate": "The total bitrate of all streams of the transport over the last stats interval.",
+        "availableBitrate": "The browser estimate of the available outgoing bandwidth. When it is below the video bitrate, the browser lowers the quality.",
+        "streamScores": "Qa, Qv and Qav are stream quality scores (MOS, 1 to 5): audio, video and combined. They depend on the sender and the server too; the network quality indicator shows the state of your own network.",
+        "channelId": "The channel id — the room on the media server. Calls are found in logs by it.",
+        "peerId": "The peer id in this call. A new one is issued on every join.",
+        "clUId": "A persistent id of this browser. Support uses it to find every call made from the device."
+      }
     },
     "track": {
       "title": "Track debug",
@@ -278,7 +339,28 @@
       "name": "Name",
       "moderator": "Moderator",
       "paused": "paused",
-      "active": "active"
+      "active": "active",
+      "hints": {
+        "bitrate": "The track bitrate over the last stats interval. The chart shows the last minute.",
+        "loss": "The share of lost packets over the last interval. The demo calculates it from the counter difference between two polls.",
+        "scores": "Qa is audio quality and Qv is video quality on the MOS scale from 1 to 5. The SDK derives them from loss, delay and jitter.",
+        "compositeScore": "Qav is the combined audio and video score. The SDK provides the formula, the demo applies it to Qa and Qv of this peer.",
+        "codec": "The codec the track is actually encoded with. Regular track stats do not include it, so the demo reads it from getInfo().",
+        "implementation": "The encoder or decoder chosen by the browser. Its name tells whether it is hardware or software.",
+        "jitter": "Variation in packet arrival time. The higher it is, the larger the buffer and delay; in audio it is heard as distortion.",
+        "freezes": "How many times the video froze since receiving started.",
+        "framesDropped": "Frames the browser received but did not show — usually the CPU cannot keep up.",
+        "qualityLimitation": "Why the browser lowered the quality of outgoing video: cpu — not enough CPU, bandwidth — not enough bandwidth, none — no limits.",
+        "feedback": "Receiver requests: nack — resend a packet, pli and fir — send a key frame. Growing counters point to packet loss.",
+        "retransmitted": "Packets sent and how many of them had to be retransmitted.",
+        "concealed": "Audio samples the browser synthesized in place of lost ones. Growth is heard as a robotic voice.",
+        "targetBitrate": "The bitrate the audio encoder aims for.",
+        "currentLayer": "The layer the server sends right now: S is spatial (resolution), T is temporal (frame rate).",
+        "requestedLayer": "The layer requested by the app. The server switches to it when bandwidth allows.",
+        "layerCount": "How many spatial and temporal layers the sender publishes.",
+        "maxLayer": "The top layer the sender publishes right now. You can limit your own to save bandwidth.",
+        "preferredCodec": "The codec chosen for publishing and the layer parameters the track is encoded with."
+      }
     },
     "copied": "Copied",
     "yes": "yes",
@@ -302,5 +384,11 @@
     "expand": "Expand",
     "collapse": "Collapse",
     "empty": "no data"
+  },
+  "apiNote": {
+    "docs": "Documentation",
+    "copy": "Copy code",
+    "copied": "Code copied",
+    "about": "About: {{label}}"
   }
 }
